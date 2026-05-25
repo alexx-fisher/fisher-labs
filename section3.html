@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fisher Labs — Selected Projects</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #f2f0f0;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    .section-wrapper {
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    .projects {
+      position: relative;
+      width: 1440px;
+      height: 490px;
+      background: #f2f0f0;
+      transform-origin: top left;
+    }
+
+    /* Asterisk */
+    .s-asterisk {
+      position: absolute;
+      left: 80px;
+      top: 34px;
+      width: 40px;
+      height: 41px;
+    }
+
+    /* Label */
+    .s-label {
+      position: absolute;
+      left: 144px;
+      top: 34px;
+      font-size: 10px;
+      font-weight: 400;
+      color: #0c0c0c;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 16px;
+    }
+
+    /* Title — 2 lines with per-line hover animation */
+    .s-title {
+      position: absolute;
+      left: 144px;
+      top: 57px;
+      font-size: 35px;
+      font-weight: 300;
+      color: #301616;
+      text-transform: uppercase;
+      line-height: 35px;
+    }
+
+    .s-title-line {
+      display: block;
+      cursor: default;
+      transform-origin: left center;
+      transition: transform 0.8s ease;
+    }
+
+    .s-title-line:hover {
+      transform: scale(1.07);
+    }
+
+    /* Filter tabs */
+    .tab {
+      position: absolute;
+      top: 101px;
+      font-size: 16px;
+      font-weight: 300;
+      color: #686868;
+      text-transform: uppercase;
+      line-height: 17px;
+      cursor: pointer;
+      white-space: nowrap;
+      transform: translateX(-50%);
+      transition: color 0.25s ease;
+      user-select: none;
+    }
+
+    .tab.active {
+      font-weight: 400;
+      color: #970c09;
+    }
+
+    .tab:hover:not(.active) {
+      color: #301616;
+    }
+
+    /* Active tab underline */
+    .tab-underline {
+      position: absolute;
+      top: 133px;
+      height: 1px;
+      background: #970c09;
+      transition: left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Project image containers */
+    .proj-img {
+      position: absolute;
+      top: 167px;
+      width: 300px;
+      height: 185px;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.35s ease, filter 0.35s ease;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.12));
+    }
+
+    .proj-img:hover {
+      transform: translateY(-6px);
+      filter: drop-shadow(0 14px 28px rgba(0,0,0,0.2));
+    }
+
+    .proj-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* Project company label */
+    .proj-company {
+      position: absolute;
+      top: 370px;
+      font-size: 12px;
+      font-weight: 400;
+      color: #0c0c0c;
+      text-transform: uppercase;
+      line-height: 16px;
+    }
+
+    /* VIEW SITE + arrow grouped for shared hover */
+    .proj-action {
+      position: absolute;
+      top: 366px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .proj-view {
+      font-size: 12px;
+      font-weight: 400;
+      color: #0c0c0c;
+      text-transform: uppercase;
+      line-height: 16px;
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 3px;
+    }
+
+    /* Underline animates in on group hover */
+    .proj-view::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: #0c0c0c;
+      transition: width 0.25s ease;
+    }
+
+    .proj-action:hover .proj-view::after {
+      width: 57px;
+    }
+
+    /* Arrow icon rotates on group hover */
+    .proj-arrow-icon {
+      width: 23px;
+      height: 23px;
+      flex-shrink: 0;
+      transition: transform 0.35s ease;
+    }
+
+    .proj-action:hover .proj-arrow-icon {
+      transform: rotate(45deg);
+    }
+
+    /* Swipe hint */
+    .swipe-text {
+      position: absolute;
+      left: 144px;
+      top: 443px;
+      font-size: 16px;
+      font-weight: 300;
+      color: #686868;
+      text-transform: uppercase;
+      line-height: 17px;
+    }
+
+    .swipe-arrow-chevron {
+      position: absolute;
+      left: 407px;
+      top: 444px;
+      display: block;
+      width: 16px;
+      height: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="section-wrapper">
+  <section class="projects">
+
+    <img class="s-asterisk" src="https://www.figma.com/api/mcp/asset/ecc6f35f-0f09-4b65-8c94-77688f11a61e" alt="">
+
+    <p class="s-label">Our work</p>
+
+    <!-- Title in 2 lines with hover animation -->
+    <div class="s-title">
+      <span class="s-title-line">Selected</span>
+      <span class="s-title-line">Projects</span>
+    </div>
+
+    <!-- Filter tabs -->
+    <span class="tab active" style="left: 981px" data-tab="websites">Websites</span>
+    <span class="tab" style="left: 1136px" data-tab="branding">Branding</span>
+    <span class="tab" style="left: 1299px" data-tab="adversting">Adversting</span>
+    <div class="tab-underline" id="tabUnderline" style="left: 941px; width: 80px;"></div>
+
+    <!-- Project 1 — Jay Cole -->
+    <div class="proj-img" style="left: 80px">
+      <img src="https://www.figma.com/api/mcp/asset/21db788b-c2e8-4b87-b3f9-adc90a1680a1" alt="Jay Cole">
+    </div>
+    <p class="proj-company" style="left: 80px">Technology Company</p>
+    <a class="proj-action" style="left: 292px" href="#">
+      <span class="proj-view">View Site</span>
+      <img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt="">
+    </a>
+
+    <!-- Project 2 — Personal Palace -->
+    <div class="proj-img" style="left: 406px">
+      <img src="https://www.figma.com/api/mcp/asset/2ff2d989-d8fa-4937-bf37-69fcbf1bb829" alt="Personal Palace">
+    </div>
+    <p class="proj-company" style="left: 406px">Technology Company</p>
+    <a class="proj-action" style="left: 618px" href="#">
+      <span class="proj-view">View Site</span>
+      <img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt="">
+    </a>
+
+    <!-- Project 3 — Strava -->
+    <div class="proj-img" style="left: 727px">
+      <img src="https://www.figma.com/api/mcp/asset/a7e3aef3-14b7-4988-8131-c1e1f7ce51f5" alt="Strava">
+    </div>
+    <p class="proj-company" style="left: 727px">Technology Company</p>
+    <a class="proj-action" style="left: 939px" href="#">
+      <span class="proj-view">View Site</span>
+      <img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt="">
+    </a>
+
+    <!-- Project 4 — Elevate -->
+    <div class="proj-img" style="left: 1060px">
+      <img src="https://www.figma.com/api/mcp/asset/5587f000-5620-4ece-a22a-77e3e4b40c52" alt="Elevate">
+    </div>
+    <p class="proj-company" style="left: 1060px">Technology Company</p>
+    <a class="proj-action" style="left: 1272px" href="#">
+      <span class="proj-view">View Site</span>
+      <img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt="">
+    </a>
+
+    <!-- Swipe hint -->
+    <p class="swipe-text" id="swipeText"></p>
+    <svg class="swipe-arrow-chevron" width="16" height="15" viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4.5 8.25L7.5 5.5L4.5 2.75" stroke="#B3B0B0" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+  </section>
+</div>
+
+<script>
+  function scale() {
+    const wrapper = document.querySelector('.section-wrapper');
+    const section = document.querySelector('.projects');
+    const s = window.innerWidth / 1440;
+    section.style.transform = 'scale(' + s + ')';
+    wrapper.style.height = (490 * s) + 'px';
+  }
+  window.addEventListener('resize', scale);
+  scale();
+
+  // Typewriter for swipe hint
+  (function() {
+    const el = document.getElementById('swipeText');
+    const full = 'Swipe right for more works';
+    let i = 0, deleting = false;
+    const TYPE_SPEED  = 55;
+    const DEL_SPEED   = 30;
+    const PAUSE_AFTER = 1400;
+    const PAUSE_BEFORE = 400;
+
+    function tick() {
+      if (!deleting) {
+        el.textContent = full.slice(0, i + 1);
+        i++;
+        if (i === full.length) {
+          deleting = true;
+          setTimeout(tick, PAUSE_AFTER);
+          return;
+        }
+        setTimeout(tick, TYPE_SPEED);
+      } else {
+        el.textContent = full.slice(0, i - 1);
+        i--;
+        if (i === 0) {
+          deleting = false;
+          setTimeout(tick, PAUSE_BEFORE);
+          return;
+        }
+        setTimeout(tick, DEL_SPEED);
+      }
+    }
+    setTimeout(tick, 600);
+  })();
+
+  // Tab switching with animated underline
+  const tabs = document.querySelectorAll('.tab');
+  const underline = document.getElementById('tabUnderline');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const rect = tab.getBoundingClientRect();
+      const sectionRect = tab.closest('.projects').getBoundingClientRect();
+      const s = sectionRect.width / 1440;
+
+      const tabCenterX = (rect.left + rect.width / 2 - sectionRect.left) / s;
+      const tabWidth = rect.width / s;
+      underline.style.left = (tabCenterX - tabWidth / 2) + 'px';
+      underline.style.width = tabWidth + 'px';
+    });
+  });
+</script>
+
+</body>
+</html>

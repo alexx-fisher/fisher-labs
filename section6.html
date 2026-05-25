@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fisher Labs — Footer</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #060605;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #cfcfcf;
+    }
+
+    .section-wrapper {
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    .footer {
+      position: relative;
+      width: 1440px;
+      height: 330px;
+      background: #060605;
+      transform-origin: top left;
+    }
+
+    /* ── Logo ── */
+    .logo-mark {
+      position: absolute;
+      left: 80px;
+      top: 49px;
+      width: 32px;
+      height: 35px;
+      display: block;
+    }
+
+    .logo-text {
+      position: absolute;
+      left: 119px;
+      top: 54px;
+      width: 38px;
+      height: 24px;
+      display: block;
+    }
+
+    /* ── Studio description ── */
+    .studio-desc {
+      position: absolute;
+      left: 80px;
+      top: 114px;
+      width: 260px;
+      font-size: 16px;
+      font-weight: 300;
+      color: #cfcfcf;
+      line-height: 20px;
+    }
+
+    /* ── Social links ── */
+    .social-link {
+      position: absolute;
+      top: 217px;
+      font-size: 14px;
+      font-weight: 300;
+      color: #cfcfcf;
+      text-transform: uppercase;
+      line-height: 20px;
+      text-decoration: none;
+      transition: color 0.25s ease;
+    }
+
+    .social-link:hover {
+      color: #ffffff;
+    }
+
+    /* ── Nav column headers ── */
+    .nav-header {
+      position: absolute;
+      top: 47px;
+      font-size: 16px;
+      font-weight: 300;
+      color: #ffffff;
+      text-transform: uppercase;
+      line-height: 20px;
+    }
+
+    /* ── Nav links ── */
+    .nav-links {
+      position: absolute;
+      top: 89px;
+      font-size: 13px;
+      font-weight: 300;
+      color: #cfcfcf;
+      text-transform: uppercase;
+      line-height: 30px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #cfcfcf;
+      text-decoration: none;
+      display: block;
+      transition: color 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+    }
+
+    /* Contact column — not uppercase */
+    .contact-links {
+      position: absolute;
+      left: 935px;
+      top: 89px;
+      font-size: 13px;
+      font-weight: 300;
+      color: #cfcfcf;
+      line-height: 30px;
+      list-style: none;
+    }
+
+    .contact-links li {
+      transition: color 0.25s ease;
+    }
+
+    .contact-links a {
+      color: #cfcfcf;
+      text-decoration: none;
+      display: block;
+      transition: color 0.25s ease;
+    }
+
+    .contact-links a:hover {
+      color: #ffffff;
+    }
+
+    /* ── Let's Talk arrow ── */
+    .lets-talk-arrow {
+      position: absolute;
+      left: 1166px;
+      top: 85px;
+      width: 40px;
+      height: 40px;
+      display: block;
+      transition: transform 0.35s ease;
+      cursor: pointer;
+    }
+
+    .lets-talk-arrow:hover {
+      transform: rotate(45deg);
+    }
+
+    /* ── Divider line ── */
+    .footer-divider {
+      position: absolute;
+      left: 80px;
+      right: 80px;
+      top: 265px;
+      height: 1px;
+      background: #2a2a2a;
+    }
+
+    /* ── Bottom row ── */
+    .footer-copy {
+      position: absolute;
+      left: 80px;
+      top: 291px;
+      font-size: 14px;
+      font-weight: 300;
+      color: #cfcfcf;
+      line-height: 20px;
+    }
+
+    .footer-legal {
+      position: absolute;
+      top: 291px;
+      font-size: 14px;
+      font-weight: 300;
+      color: #cfcfcf;
+      text-transform: uppercase;
+      line-height: 20px;
+      text-decoration: none;
+      transition: color 0.25s ease;
+    }
+
+    .footer-legal:hover {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+<div class="section-wrapper">
+  <footer class="footer">
+
+    <!-- Logo -->
+    <img class="logo-mark" src="https://www.figma.com/api/mcp/asset/e099e264-3db7-4f6b-8d43-6fbc50543e9c" alt="Fisher Labs">
+    <img class="logo-text"  src="https://www.figma.com/api/mcp/asset/f9a87832-815b-430c-bf1e-dd0ae8f96170" alt="Fisher Labs">
+
+    <!-- Studio description -->
+    <p class="studio-desc">We are a creative web design studio helping brands grow through digital design, development and strategy.</p>
+
+    <!-- Social links -->
+    <a class="social-link" style="left: 80px"  href="#">Instagram</a>
+    <a class="social-link" style="left: 207px" href="#">Behance</a>
+    <a class="social-link" style="left: 322px" href="#">Dribble</a>
+
+    <!-- Nav column 1 -->
+    <p class="nav-header" style="left: 483px">Navigation</p>
+    <ul class="nav-links" style="left: 483px">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Work</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Process</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+
+    <!-- Nav column 2 -->
+    <p class="nav-header" style="left: 672px">Navigation</p>
+    <ul class="nav-links" style="left: 672px; text-transform: none;">
+      <li><a href="#">Web Design</a></li>
+      <li><a href="#">Development</a></li>
+      <li><a href="#">Advertising Creatives</a></li>
+      <li><a href="#">Branding &amp; Identity</a></li>
+    </ul>
+
+    <!-- Contact column -->
+    <p class="nav-header" style="left: 935px">Contact</p>
+    <ul class="contact-links">
+      <li><a href="mailto:hello@fisherlabs.com">hello@fisherlabs.com</a></li>
+      <li><a href="tel:+17472878064">+1 (747) 287 80 64</a></li>
+      <li>Los Angeles, CA</li>
+    </ul>
+
+    <!-- Let's Talk -->
+    <p class="nav-header" style="left: 1166px">Let's Talk</p>
+    <img class="lets-talk-arrow" src="https://www.figma.com/api/mcp/asset/ed24f0f9-4caf-407e-a4d1-447f809c1bf4" alt="Let's Talk">
+
+    <!-- Bottom row -->
+    <p class="footer-copy">© 2024 Fisher Labs. All rights reserved.</p>
+    <a class="footer-legal" style="left: 1062px" href="#">Privacy Policy</a>
+    <a class="footer-legal" style="left: 1230px" href="#">Terms of Service</a>
+
+  </footer>
+</div>
+
+<script>
+  function scale() {
+    const wrapper = document.querySelector('.section-wrapper');
+    const section = document.querySelector('.footer');
+    const s = window.innerWidth / 1440;
+    section.style.transform = 'scale(' + s + ')';
+    wrapper.style.height = (330 * s) + 'px';
+  }
+  window.addEventListener('resize', scale);
+  scale();
+</script>
+
+</body>
+</html>

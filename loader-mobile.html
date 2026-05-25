@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fisher Labs</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #f2f0f0; }
+
+    #loader { position: fixed; inset: 0; background: #f2f0f0; z-index: 9999; }
+
+    /* Fade overlay */
+    #lFade {
+      position: absolute; inset: 0;
+      background: #f2f0f0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ── 390px stage ── */
+    #lStage {
+      position: absolute; top: 0; left: 0;
+      width: 390px;
+      transform-origin: top left;
+    }
+
+    /* ── Cylinder text reveal ── */
+    .l-clip {
+      display: inline-block;
+      overflow: hidden;
+      perspective: 350px;
+      vertical-align: top;
+    }
+    .l-reveal {
+      display: block;
+      transform: rotateX(-80deg);
+      transform-origin: 50% 100%;
+      opacity: 0;
+      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.3s ease 0.2s;
+    }
+    .l-reveal.on {
+      transform: rotateX(0deg);
+      opacity: 1;
+    }
+    .l-reveal.l-delay-2 {
+      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s,
+                  opacity 0.3s ease 0.35s;
+    }
+    .l-reveal.l-delay-3 {
+      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.30s,
+                  opacity 0.3s ease 0.50s;
+    }
+
+    /* ── Left slide-in ── */
+    .l-slide-left {
+      display: block;
+      transform: translateX(-40px);
+      opacity: 0;
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.5s ease;
+    }
+    .l-slide-left.l-delay-2 {
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s,
+                  opacity 0.5s ease 0.15s;
+    }
+    .l-slide-left.l-delay-3 {
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.30s,
+                  opacity 0.5s ease 0.30s;
+    }
+    .l-slide-left.on { transform: translateX(0); opacity: 1; }
+
+    /* ── Right slide-in ── */
+    .l-slide-right {
+      display: block;
+      transform: translateX(40px);
+      opacity: 0;
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.5s ease;
+    }
+    .l-slide-right.l-delay-2 {
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s,
+                  opacity 0.5s ease 0.15s;
+    }
+    .l-slide-right.on { transform: translateX(0); opacity: 1; }
+
+    /* ── Left label ── */
+    .l-left-label {
+      position: absolute;
+      left: 20px; top: 39%;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 11px; font-weight: 300; line-height: 14px;
+      color: #0c0c0c; text-transform: uppercase;
+    }
+    .l-left-label .l-clip { display: block; }
+
+    /* ── Right label ── */
+    .l-right-label {
+      position: absolute; right: 20px; top: 44%;
+      transform: translateY(-50%);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 11px; font-weight: 300; line-height: 14px;
+      color: #0c0c0c; text-transform: uppercase; text-align: right;
+    }
+
+    /* ── Bottom tagline ── */
+    .l-bottom {
+      position: absolute; left: 50%; top: 90%;
+      transform: translate(-50%, -50%);
+      width: 270px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 10px; font-weight: 300; line-height: 14px;
+      color: #0c0c0c; text-align: center;
+    }
+
+    /* ── Card container ── */
+    #lCardWrap {
+      position: absolute;
+      left: 195px;
+      width: 80px;
+      transform: translate(-50%, -50%);
+      overflow: visible;
+    }
+
+    /* ── Individual cards ── */
+    .l-card {
+      position: absolute; top: 0; left: 0;
+      width: 80px; height: 80px;
+      border-radius: 5px; overflow: hidden;
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+    .l-card img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loader">
+    <div id="lStage">
+
+      <!-- Left: LOADING / CREATIVE / SYSTEMS -->
+      <div class="l-left-label" id="tLeft">
+        <div class="l-clip"><span class="l-slide-left">Loading</span></div>
+        <div class="l-clip"><span class="l-slide-left l-delay-2">Creative</span></div>
+        <div class="l-clip"><span class="l-slide-left l-delay-3">Systems</span></div>
+      </div>
+
+      <!-- Right: DIGITAL EXPERIENCES -->
+      <p class="l-right-label" id="tRight">
+        <span class="l-clip" style="display:block;"><span class="l-slide-right">Digital</span></span>
+        <span class="l-clip" style="display:block;"><span class="l-slide-right l-delay-2">Experiences</span></span>
+      </p>
+
+      <!-- Bottom: tagline -->
+      <p class="l-bottom">
+        <span class="l-clip" style="width:270px; display:block;">
+          <span class="l-reveal" id="tBottom">A creative digital studio crafting immersive websites,<br>visual identities and modern brand systems</span>
+        </span>
+      </p>
+
+      <!-- Card animation container -->
+      <div id="lCardWrap"></div>
+
+    </div>
+
+    <!-- Fade overlay -->
+    <div id="lFade"></div>
+  </div>
+
+  <script>
+  (function () {
+    var stage = document.getElementById('lStage');
+    var wrap  = document.getElementById('lCardWrap');
+    var TOTAL = 8;
+    var CSIZE = 80;
+    var BASE  = 390;
+
+    /* ── Scale helpers ── */
+    function sc()     { return window.innerWidth / BASE; }
+    function stageH() { return window.innerHeight / sc(); }
+
+    function scaleStage() {
+      stage.style.transform = 'scale(' + sc() + ')';
+      stage.style.height    = stageH() + 'px';
+    }
+    window.addEventListener('resize', scaleStage, { passive: true });
+
+    /* ── Create 8 cards ── */
+    var cards = [];
+    for (var i = 0; i < TOTAL; i++) {
+      var c   = document.createElement('div');
+      c.className = 'l-card';
+      var img = document.createElement('img');
+      img.src = 'loader-images/img-0' + (i + 1) + '.webp';
+      c.appendChild(img);
+      wrap.appendChild(c);
+      cards.push(c);
+    }
+
+    /* ── Wrap positioning ── */
+    function setWrapTop(pct) {
+      wrap.style.top = (stageH() * pct) + 'px';
+    }
+
+    /* ── Show only one card ── */
+    function showOnly(idx) {
+      for (var k = 0; k < TOTAL; k++) {
+        cards[k].style.opacity   = (k === idx) ? '1' : '0';
+        cards[k].style.transform = 'none';
+        cards[k].style.zIndex    = (k === idx) ? '1' : '0';
+      }
+    }
+
+    /* ── Init: img-01 at bottom ── */
+    wrap.style.position  = 'absolute';
+    wrap.style.height    = CSIZE + 'px';
+    wrap.style.transform = 'translate(-50%, -50%)';
+    setWrapTop(0.88);
+    showOnly(0);
+
+    scaleStage();
+
+    /* ── Wait for images to load ── */
+    var loaded = 0;
+    function onImgLoad() {
+      loaded++;
+      if (loaded >= TOTAL) beginAnim();
+    }
+    cards.forEach(function (c) {
+      var img = c.querySelector('img');
+      if (img.complete) { onImgLoad(); }
+      else { img.addEventListener('load', onImgLoad); }
+    });
+    var fallbackTimer = setTimeout(beginAnim, 1500);
+
+    var animStarted = false;
+    function beginAnim() {
+      if (animStarted) return;
+      animStarted = true;
+      clearTimeout(fallbackTimer);
+      requestAnimationFrame(function () {
+        requestAnimationFrame(phase1);
+      });
+    }
+
+    /* ── Counter 0 → 100% ── */
+    function startCounter() {
+      var el       = document.getElementById('tPercent');
+      if (!el) return;
+      var duration = 3400;
+      var start    = performance.now();
+      function tick(now) {
+        var p     = Math.min(1, (now - start) / duration);
+        var eased = 1 - Math.pow(1 - p, 2);
+        el.textContent = Math.floor(eased * 100) + '%';
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = '100%';
+      }
+      requestAnimationFrame(tick);
+    }
+
+    /* ── Stack maps (scaled from desktop Figma) ── */
+    var scaleMap = [1.30, 1.01, 0.815, 0.632, 0.491, 0.431, 0.383, 0.318];
+    var tyMap    = [ -15,   18,    41,    61,    75,    82,    87,    93 ];
+
+    /* ══════════════════════════════════════
+       PHASE 1 — Rise up + 2 cycles, stop on logo
+    ══════════════════════════════════════ */
+    function phase1() {
+      wrap.style.transition = 'top 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      setWrapTop(0.44);
+
+      setTimeout(function () {
+        document.querySelectorAll('#tLeft .l-slide-left').forEach(function(el) { el.classList.add('on'); });
+        document.getElementById('tBottom').classList.add('on');
+        document.querySelectorAll('#tRight .l-slide-right').forEach(function(el) { el.classList.add('on'); });
+        startCounter();
+      }, 50);
+
+      var active = 0;
+      var cycles = 0;
+      var cycleTimer = setInterval(function () {
+        cards[active].style.opacity = '0';
+        active = (active + 1) % TOTAL;
+        cards[active].style.opacity = '1';
+        if (active === TOTAL - 1) {
+          cycles++;
+          if (cycles >= 2) {
+            clearInterval(cycleTimer);
+            setTimeout(phase2, 500);
+          }
+        }
+      }, 70);
+    }
+
+    /* ══════════════════════════════════════
+       PHASE 2 — Card stack
+    ══════════════════════════════════════ */
+    function phase2() {
+      for (var b = 0; b < TOTAL; b++) {
+        var ci = (7 - b + TOTAL) % TOTAL;
+        cards[ci].style.transition   = 'transform 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        cards[ci].style.opacity      = '1';
+        cards[ci].style.transform    = 'translateY(' + tyMap[b] + 'px) scale(' + scaleMap[b] + ')';
+        cards[ci].style.zIndex       = (TOTAL - b).toString();
+        cards[ci].style.borderRadius = '5px';
+      }
+      setTimeout(phase3, 850);
+    }
+
+    /* ══════════════════════════════════════
+       PHASE 3 — Unfold from stack center
+    ══════════════════════════════════════ */
+    function phase3() {
+      var tBottom = document.getElementById('tBottom');
+      if (tBottom) {
+        tBottom.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        tBottom.style.opacity    = '0';
+        tBottom.style.transform  = 'translateY(50px)';
+      }
+
+      var sh      = stageH();
+      var GAP     = 3;
+      var dynSize = Math.max(50, Math.min(130, Math.floor((sh * 0.92 - (TOTAL - 1) * GAP) / TOTAL)));
+      var colH    = TOTAL * dynSize + (TOTAL - 1) * GAP;
+      var newTop  = sh * 0.5 - colH / 2;
+
+      wrap.style.transition = 'none';
+      wrap.style.width      = dynSize + 'px';
+      wrap.style.height     = colH + 'px';
+      wrap.style.top        = newTop + 'px';
+      wrap.style.transform  = 'translateX(-50%)';
+
+      for (var b = 0; b < TOTAL; b++) {
+        var ci       = (7 - b + TOTAL) % TOTAL;
+        var startTop = (sh * 0.44 + tyMap[b]) - newTop - dynSize / 2;
+        cards[ci].style.transition = 'none';
+        cards[ci].style.top        = startTop + 'px';
+        cards[ci].style.left       = '0';
+        cards[ci].style.width      = dynSize + 'px';
+        cards[ci].style.height     = dynSize + 'px';
+        cards[ci].style.transform  = 'scale(' + (scaleMap[b] * CSIZE / dynSize) + ')';
+      }
+
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          cards.forEach(function (c, i) {
+            var delay = (TOTAL - 1 - i) * 0.05;
+            c.style.transition   = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) ' + delay + 's';
+            c.style.transform    = 'none';
+            c.style.top          = (i * (dynSize + GAP)) + 'px';
+            c.style.borderRadius = '5px';
+          });
+        });
+      });
+
+      setTimeout(phase4, 1100);
+    }
+
+    /* ══════════════════════════════════════
+       PHASE 4 — Gradient wipe upward
+    ══════════════════════════════════════ */
+    function phase4() {
+      var loader = document.getElementById('loader');
+      loader.style.webkitMaskImage = 'linear-gradient(to bottom, black 55%, transparent 100%)';
+      loader.style.maskImage       = 'linear-gradient(to bottom, black 55%, transparent 100%)';
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          loader.style.transition = 'transform 0.9s cubic-bezier(0.4, 0, 0.2, 1)';
+          loader.style.transform  = 'translateY(-100%)';
+          setTimeout(function () {
+            loader.style.display = 'none';
+          }, 950);
+        });
+      });
+    }
+
+  })();
+  </script>
+
+</body>
+</html>

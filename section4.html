@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fisher Labs — From Idea to Impact</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #1f0504;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    .section-wrapper {
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    .approach {
+      position: relative;
+      width: 1440px;
+      height: 245px;
+      background: #1f0504;
+      transform-origin: top left;
+      overflow: hidden;
+    }
+
+    /* Ellipse glow — large radial gradient centered in section */
+    .glow {
+      position: absolute;
+      left: 12px;
+      top: -56px;
+      width: 1416px;
+      height: 357px;
+      pointer-events: none;
+    }
+
+    .glow img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Asterisk */
+    .s-asterisk {
+      position: absolute;
+      left: 80px;
+      top: 34px;
+      width: 40px;
+      height: 41px;
+    }
+
+    /* Label */
+    .s-label {
+      position: absolute;
+      left: 144px;
+      top: 34px;
+      font-size: 10px;
+      font-weight: 400;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 16px;
+    }
+
+    /* Title */
+    .s-title {
+      position: absolute;
+      left: 144px;
+      top: 57px;
+      font-size: 35px;
+      font-weight: 300;
+      color: #ffffff;
+      text-transform: uppercase;
+      line-height: 35px;
+      width: 213px;
+    }
+
+    .s-title-line {
+      display: block;
+      cursor: default;
+      transform-origin: left center;
+      transition: transform 0.8s ease;
+    }
+
+    .s-title-line:hover {
+      transform: scale(1.07);
+    }
+
+    /* Description */
+    .s-desc {
+      position: absolute;
+      left: 144px;
+      top: 154px;
+      width: 219px;
+      font-size: 14px;
+      font-weight: 300;
+      color: #cfcfcf;
+      line-height: 18px;
+    }
+
+    /* Step number */
+    .step-num {
+      position: absolute;
+      top: 42px;
+      font-size: 25px;
+      font-weight: 300;
+      color: #ffffff;
+      text-transform: uppercase;
+      line-height: 35px;
+    }
+
+    /* Connector (dot + line) between steps */
+    .step-connector {
+      position: absolute;
+      top: 59px;
+      height: 5px;
+      width: 120px;
+    }
+
+    /* Step name */
+    .step-name {
+      position: absolute;
+      top: 92px;
+      font-size: 20px;
+      font-weight: 300;
+      color: #ffffff;
+      text-transform: uppercase;
+      line-height: 20px;
+      cursor: default;
+      transform-origin: left center;
+      transition: transform 0.8s ease;
+    }
+
+    .step-name:hover {
+      transform: scale(1.07);
+    }
+
+    /* Step description */
+    .step-desc {
+      position: absolute;
+      top: 128px;
+      width: 127px;
+      font-size: 14px;
+      font-weight: 300;
+      color: #cfcfcf;
+      line-height: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="section-wrapper">
+  <section class="approach">
+
+    <!-- Background glow ellipse -->
+    <div class="glow">
+      <img src="https://www.figma.com/api/mcp/asset/333ac4c6-154f-4760-89c1-927cd4fd0322" alt="">
+    </div>
+
+    <img class="s-asterisk" src="https://www.figma.com/api/mcp/asset/950478e3-6dcd-49b4-9fac-5cc47a5716d8" alt="">
+
+    <p class="s-label">Our approach</p>
+
+    <div class="s-title">
+      <span class="s-title-line">From idea</span>
+      <span class="s-title-line">to impact</span>
+    </div>
+
+    <p class="s-desc">We follow a clear process to deliver high-quality digital solutions</p>
+
+    <!-- Step 01 — Discover -->
+    <span class="step-num" style="left: 439px">01</span>
+    <img class="step-connector" style="left: 494px" src="https://www.figma.com/api/mcp/asset/710e8764-f3b5-4812-88fd-e898d6eb1597" alt="">
+    <span class="step-name" style="left: 439px">Discover</span>
+    <p class="step-desc" style="left: 439px">We learn about your business, goals and audience</p>
+
+    <!-- Step 02 — Strategy -->
+    <span class="step-num" style="left: 639px">02</span>
+    <img class="step-connector" style="left: 694px" src="https://www.figma.com/api/mcp/asset/710e8764-f3b5-4812-88fd-e898d6eb1597" alt="">
+    <span class="step-name" style="left: 639px">Strategy</span>
+    <p class="step-desc" style="left: 639px">We define the right strategy and creative direction</p>
+
+    <!-- Step 03 — Design -->
+    <span class="step-num" style="left: 839px">03</span>
+    <img class="step-connector" style="left: 894px" src="https://www.figma.com/api/mcp/asset/710e8764-f3b5-4812-88fd-e898d6eb1597" alt="">
+    <span class="step-name" style="left: 839px">Design</span>
+    <p class="step-desc" style="left: 839px">We create modern, functional and engaging designs</p>
+
+    <!-- Step 04 — Develop -->
+    <span class="step-num" style="left: 1037px">04</span>
+    <img class="step-connector" style="left: 1092px" src="https://www.figma.com/api/mcp/asset/710e8764-f3b5-4812-88fd-e898d6eb1597" alt="">
+    <span class="step-name" style="left: 1037px">Develop</span>
+    <p class="step-desc" style="left: 1037px">We build fast, responsive and high-performing solutions</p>
+
+    <!-- Step 05 — Deliver (no connector after) -->
+    <span class="step-num" style="left: 1235px">05</span>
+    <span class="step-name" style="left: 1235px">Deliver</span>
+    <p class="step-desc" style="left: 1235px">We test, launch and support your project for success</p>
+
+  </section>
+</div>
+
+<script>
+  function scale() {
+    const wrapper = document.querySelector('.section-wrapper');
+    const section = document.querySelector('.approach');
+    const s = window.innerWidth / 1440;
+    section.style.transform = 'scale(' + s + ')';
+    wrapper.style.height = (245 * s) + 'px';
+  }
+  window.addEventListener('resize', scale);
+  scale();
+</script>
+
+</body>
+</html>

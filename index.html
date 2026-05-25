@@ -1,314 +1,3182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fisher Labs — Creative Web Design Studio</title>
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fisher Labs — Creative Web Design Studio</title>
+  <style>
 
-        html, body {
-            height: 100%;
-            background: #0a0404;
-            color: #fff;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        }
+    /* ══════════════════════════════════════
+       RESET & BASE
+    ══════════════════════════════════════ */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #0c0c0c; }
 
-        /* ── HERO ── */
-        .hero {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            min-height: 560px;
-            overflow: hidden;
-        }
+    /* All section wrappers */
+    .section-wrapper, .hero-wrapper { width: 100vw; overflow: hidden; }
 
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(110deg,
-                    rgba(4,1,1,0.72) 0%,
-                    rgba(4,1,1,0.05) 34%,
-                    rgba(4,1,1,0.0)  50%,
-                    rgba(4,1,1,0.55) 100%
-                ),
-                linear-gradient(to bottom,
-                    rgba(4,1,1,0.55) 0%,
-                    rgba(4,1,1,0.0)  15%,
-                    rgba(4,1,1,0.0)  68%,
-                    rgba(4,1,1,0.80) 100%
-                ),
-                url('./hero.png');
-            background-size: cover;
-            background-position: center;
-        }
+    /* ── Hero scroll scrub zone ── */
+    #hero-scrub-zone {
+      position: relative;
+      height: 200vh;
+    }
+    @media (max-width: 768px) {
+      #hero-scrub-zone { height: 0 !important; overflow: hidden; }
+    }
 
-        /* ── NAVIGATION ── */
-        nav {
-            position: absolute;
-            inset: 0 0 auto;
-            z-index: 20;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 28px 44px;
-        }
+    #w-hero {
+      position: sticky !important;
+      top: 0;
+      background: url('frames/frame_0001.jpg') center/cover no-repeat #030303;
+    }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: #fff;
-        }
-        .logo-mark { width: 46px; height: 46px; flex-shrink: 0; }
-        .logo-text {
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            line-height: 1.35;
-        }
+    .hero-video-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-        .nav-links {
-            list-style: none;
-            display: flex;
-            align-items: center;
-            gap: 38px;
-        }
-        .nav-links a {
-            color: rgba(255,255,255,0.88);
-            text-decoration: none;
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            transition: opacity 0.2s;
-        }
-        .nav-links a:hover { opacity: 0.55; }
+    .hero-video-grad {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(0,0,0,0.30) 0%,
+        rgba(0,0,0,0.05) 35%,
+        rgba(3,3,3,0.55) 75%,
+        #030303 100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
 
-        .btn-circle {
-            border: 1.5px solid rgba(255,255,255,0.58);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            flex-shrink: 0;
-            background: transparent;
-            transition: border-color 0.2s;
-        }
-        .btn-circle:hover { border-color: rgba(255,255,255,0.9); }
-        .btn-circle--nav  { width: 46px; height: 46px; }
-        .btn-circle--lg   { width: 56px; height: 56px; }
-        .btn-circle--card { width: 42px; height: 42px; }
+    /* Each wrapper gets its section's background so sub-pixel gaps stay invisible */
+    /* Note: #w-hero background is set in the sticky rule above (with frame_0001 fallback) */
+    #w-services, #w-projects, #w-cta { background: #f2f0f0; }
+    #w-approach                      { background: #1f0504; }
+    #w-footer                        { background: #060605; }
 
-        /* ── LEFT HEADLINE ── */
-        .hero-left {
-            position: absolute;
-            left: 44px;
-            top: 30%;
-        }
-        .hero-headline {
-            font-size: clamp(28px, 3.1vw, 46px);
-            font-weight: 800;
-            line-height: 1.06;
-            text-transform: uppercase;
-            letter-spacing: -0.01em;
-            margin-bottom: 14px;
-        }
-        .hero-subtext {
-            font-size: 12.5px;
-            line-height: 1.72;
-            color: rgba(255,255,255,0.65);
-            max-width: 192px;
-        }
+    /* ── Shared: title line hover animation (all light sections) ── */
+    .s-title-line {
+      display: block;
+      cursor: default;
+      transform-origin: left center;
+      transition: transform 0.8s ease;
+    }
+    .s-title-line:hover { transform: scale(1.07); }
 
-        /* ── RIGHT TITLE ── */
-        .hero-right {
-            position: absolute;
-            right: 44px;
-            top: 20%;
-            text-align: right;
-        }
-        .hero-title {
-            display: block;
-            font-size: clamp(64px, 9vw, 124px);
-            font-weight: 900;
-            line-height: 0.92;
-            text-transform: uppercase;
-            letter-spacing: -0.028em;
-        }
-        .hero-right-bottom {
-            display: flex;
-            align-items: flex-end;
-            justify-content: flex-end;
-            gap: 22px;
-            margin-top: 24px;
-        }
-        .hero-right-sub {
-            font-size: 12.5px;
-            line-height: 1.72;
-            color: rgba(255,255,255,0.65);
-            max-width: 215px;
-            text-align: right;
-        }
+    /* ── Shared: asterisk ── */
+    .s-asterisk { position: absolute; left: 80px; top: 34px; width: 40px; height: 41px; }
+    .cta .s-asterisk { top: 44px; }
 
-        /* ── BOTTOM CARDS ── */
-        .hero-cards {
-            position: absolute;
-            left: 44px;
-            bottom: 48px;
-            display: flex;
-            gap: 10px;
-            align-items: stretch;
-        }
+    /* ── Shared: section label ── */
+    .s-label {
+      position: absolute;
+      left: 144px;
+      top: 34px;
+      font-size: 10px;
+      font-weight: 400;
+      color: #0c0c0c;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 16px;
+    }
+    .approach .s-label { color: #ffffff; }
 
-        .card-stat {
-            background: rgba(255,255,255,0.96);
-            border-radius: 18px;
-            padding: 20px 24px 18px;
-            color: #111;
-            min-width: 170px;
-        }
-        .card-stat-top {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-        .card-asterisk {
-            color: #cc1010;
-            font-size: 22px;
-            line-height: 1;
-            font-weight: 900;
-        }
-        .card-stat-label {
-            font-size: 10.5px;
-            color: #666;
-            font-weight: 500;
-            letter-spacing: 0.01em;
-        }
-        .card-stat-num {
-            font-size: 54px;
-            font-weight: 800;
-            color: #111;
-            line-height: 1;
-            letter-spacing: -0.025em;
-        }
-        .card-stat-desc {
-            font-size: 10.5px;
-            color: #888;
-            margin-top: 5px;
-        }
+    /* ── Shared: section title base ── */
+    .s-title {
+      position: absolute;
+      left: 144px;
+      top: 57px;
+      font-size: 35px;
+      font-weight: 300;
+      color: #301616;
+      text-transform: uppercase;
+      line-height: 35px;
+    }
+    .services  .s-title { width: 311px; }
+    .approach  .s-title { width: 213px; color: #ffffff; }
+    .cta       .s-title { width: 348px; top: 44px; }
 
-        .card-cta {
-            background: rgba(20,11,9,0.88);
-            border-radius: 18px;
-            padding: 22px 22px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 18px;
-            min-width: 195px;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-        }
-        .card-cta-text {
-            font-size: 20px;
-            font-weight: 700;
-            line-height: 1.22;
-            color: #fff;
-        }
 
-        /* Arrow icon */
-        .ic-arrow { width: 15px; height: 15px; display: block; }
-    </style>
+    /* ══════════════════════════════════════
+       1. HERO
+    ══════════════════════════════════════ */
+    .hero {
+      position: relative;
+      width: 1440px;
+      height: 640px;
+      background: transparent;
+      font-weight: 300;
+      transform-origin: top left;
+      z-index: 2;
+    }
+    .hero-bg-clip { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .hero-bg { position: absolute; left: 0; top: -53px; width: 1440px; height: 719px; object-fit: cover; pointer-events: none; }
+
+    .logo { position: absolute; left: 61px; top: 35.72px; display: flex; align-items: center; gap: 8px; }
+    .logo-icon { height: 35.122px; width: 32.231px; }
+    .logo-wordmark { height: 23.595px; width: 37.648px; }
+
+    .nav-link {
+      position: absolute;
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 300;
+      text-transform: uppercase;
+      line-height: 15px;
+      white-space: nowrap;
+      top: 45px;
+      transition: transform 0.15s ease, text-shadow 0.15s ease;
+      display: inline-block;
+    }
+    .nav-link:hover {
+      transform: scale(1.08);
+      text-shadow: 0 0 0.8px rgba(255,255,255,0.9), 0 0 0.8px rgba(255,255,255,0.5);
+    }
+
+    .lang-selector { position: absolute; left: 1323px; top: 33px; width: 39px; z-index: 10; }
+    .lang-btn {
+      width: 39px; height: 39px;
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 10px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: backdrop-filter 0.3s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+    .lang-btn:hover { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transform: scale(1.1); }
+    .lang-selector.open .lang-btn:hover,
+    .lang-selector.open .lang-option:hover { background: white; color: black; }
+    .lang-dropdown { overflow: hidden; max-height: 0; transition: max-height 0.35s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .lang-selector.open .lang-dropdown { max-height: 50px; }
+    .lang-option {
+      width: 39px; height: 39px;
+      border: 1px solid rgba(255,255,255,0.6); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 10px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.5px;
+      cursor: pointer; margin-top: 5px;
+      transform: translateY(-10px); opacity: 0;
+      transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.35s ease, background 0.2s ease, color 0.2s ease;
+    }
+    .lang-selector.open .lang-option { transform: translateY(0); opacity: 1; }
+    .lang-option:hover { background: white; color: black; }
+
+    @keyframes slideInLeft  { from { opacity:0; transform:translateX(-50px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes slideInRight { from { opacity:0; transform:translateX(50px);  } to { opacity:1; transform:translateX(0); } }
+
+    .headline-left  { position: absolute; left: 61px;  top: 200px; font-size: 43px; font-weight: 300; color: white; text-transform: uppercase; line-height: 46px; white-space: nowrap; }
+    .headline-right { position: absolute; right: 78px; top: 150px; font-size: 77px; font-weight: 300; color: white; text-transform: uppercase; text-align: right; line-height: 75px; white-space: nowrap; }
+
+    /* Lines stay invisible until loader is done */
+    .headline-left .line, .headline-right .line { display: block; opacity: 0; cursor: default; transition: transform 0.5s ease; transform-origin: left center; }
+    .headline-right .line { transform-origin: right center; }
+
+    /* Triggered by body.hero-ready after loader completes */
+    body.hero-ready .headline-left  .line { animation: slideInLeft  0.7s cubic-bezier(0.25,0.46,0.45,0.94) forwards; }
+    body.hero-ready .headline-right .line { animation: slideInRight 0.7s cubic-bezier(0.25,0.46,0.45,0.94) forwards; }
+    body.hero-ready .headline-left  .line:nth-child(1) { animation-delay: 0.05s; }
+    body.hero-ready .headline-left  .line:nth-child(2) { animation-delay: 0.13s; }
+    body.hero-ready .headline-left  .line:nth-child(3) { animation-delay: 0.21s; }
+    body.hero-ready .headline-right .line:nth-child(1) { animation-delay: 0.05s; }
+    body.hero-ready .headline-right .line:nth-child(2) { animation-delay: 0.13s; }
+    body.hero-ready .headline-right .line:nth-child(3) { animation-delay: 0.21s; }
+    .headline-left  .line.anim-done,
+    .headline-right .line.anim-done { transition: transform 0.8s ease; }
+    .headline-left  .line.anim-done:hover,
+    .headline-right .line.anim-done:hover { transform: scale(1.07); }
+
+    .desc-left  { position: absolute; left: 61px;    top: 362px; width: 170px; font-size: 13px; font-weight: 300; color: white; line-height: 16px; opacity: 0; }
+    .desc-right { position: absolute; left: 1094px;  top: 480px; width: 170px; font-size: 15px; font-weight: 300; color: white; line-height: 16px; opacity: 0; }
+    body.hero-ready .desc-left  { animation: slideInLeft  0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.25s forwards; }
+    body.hero-ready .desc-right { animation: slideInRight 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.25s forwards; }
+
+    .card-stats { position: absolute; left: 61px; top: 456px; width: 180px; height: 145px; background: white; border-radius: 15px; }
+    .card-stats-icon   { position: absolute; left: 16px; top: 17px;  width: 16.787px; height: 17.051px; }
+    .card-stats-label  { position: absolute; left: 44px; top: 17px;  font-size: 11px; font-weight: 300; color: black; line-height: 12px; }
+    .card-stats-number { position: absolute; left: 16px; top: 69px;  font-size: 45px; font-weight: 300; color: black; line-height: 40px; }
+    .card-stats-sub    { position: absolute; left: 16px; top: 116px; font-size: 12px; font-weight: 300; color: black; line-height: 11px; }
+
+    .card-cta {
+      position: absolute; left: 251px; top: 457px; width: 152px; height: 145px;
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      clip-path: path('M 15,0 L 137,0 A 15,15 0 0,1 152,15 L 152,125 L 132,145 L 15,145 A 15,15 0 0,1 0,130 L 0,15 A 15,15 0 0,1 15,0 Z');
+      transition: transform 0.3s ease; cursor: pointer;
+    }
+    .card-cta::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 80%, rgba(220,80,80,0.7) 0%, rgba(180,50,50,0.35) 45%, transparent 70%);
+      opacity: 0; transition: opacity 0.35s ease; pointer-events: none; z-index: 2;
+    }
+    .card-cta:hover { transform: translateY(-6px) scale(1.06); }
+    .card-cta:hover::before { opacity: 1; }
+    .card-cta-bg   { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .card-cta-text { position: absolute; left: 14px; top: 17px; width: 78px; font-size: 15px; font-weight: 300; color: white; line-height: 15px; }
+    .card-cta-btn  { position: absolute; right: 14px; top: 19px; width: 33px; height: 33px; border: 1px solid rgba(255,255,255,0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 3; }
+    .card-cta-btn svg { transition: transform 0.3s ease; }
+    .card-cta:hover .card-cta-btn svg { transform: rotate(-45deg); }
+
+    .arrow-btn { position: absolute; left: 1297px; top: 470px; width: 65px; height: 65px; border: 1px solid white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: backdrop-filter 0.3s ease; }
+    .arrow-btn:hover { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    .arrow-btn svg { transition: transform 0.3s ease; }
+    .arrow-btn:hover svg { transform: rotate(-45deg); }
+
+
+    /* ══════════════════════════════════════
+       2. SERVICES
+    ══════════════════════════════════════ */
+    .services {
+      position: relative; width: 1440px; height: 530px;
+      background: #f2f0f0; transform-origin: top left;
+    }
+    .services .s-desc {
+      position: absolute; left: 521px; top: 73px; width: 264px;
+      font-size: 14px; font-weight: 300; color: #0c0c0c; line-height: 18px;
+    }
+
+    .card {
+      position: absolute; top: 172px; width: 395px; height: 265px;
+      background: #f0f0f0; border: 1px solid #dcdcdc; border-radius: 12px;
+    }
+    .card-num   { position: absolute; left: 26px; top: 23px;  font-size: 14px; font-weight: 400; color: #970c09; line-height: 18px; }
+    .card-title { position: absolute; left: 26px; top: 48px;  font-size: 25px; font-weight: 300; color: #301616; text-transform: uppercase; line-height: 25px; width: 267px; }
+    .card-text  { position: absolute; left: 26px; top: 112px; width: 178px; font-size: 14px; font-weight: 300; color: #0c0c0c; line-height: 18px; }
+
+    .card-btn {
+      position: absolute; left: 15px; bottom: 17px; width: 180px; height: 40px;
+      background: #f1f1f1; border: 1px solid #c8c8c8; border-radius: 10px;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 14px;
+      cursor: pointer; text-decoration: none; overflow: hidden;
+    }
+    .card-btn::before {
+      content: ''; position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+      background: #970c09; border-radius: 10px;
+      clip-path: inset(0 100% 0 0 round 10px);
+      transition: clip-path 0.4s ease; z-index: 0;
+    }
+    .card-btn:hover::before { clip-path: inset(0 0% 0 0 round 10px); }
+    .card-btn span { font-size: 11px; font-weight: 400; color: #0c0c0c; text-transform: uppercase; letter-spacing: 0.3px; position: relative; z-index: 1; transition: color 0.4s ease; }
+    .card-btn svg  { flex-shrink: 0; position: relative; z-index: 1; }
+    .card-btn svg path { transition: stroke 0.4s ease; }
+    .card-btn:hover span { color: white; }
+    .card-btn:hover svg path { stroke: white; }
+
+    /* Cards + photos: hidden by default, animate in on scroll */
+    .services .card,
+    .services .card-photo-wrapper {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .services .card.in-view,
+    .services .card-photo-wrapper.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-photo-wrapper { position: absolute; top: 337px; width: 207px; height: 120px; perspective: 700px; }
+    .card-photo { width: 100%; height: 100%; filter: drop-shadow(0 10px 24px rgba(0,0,0,0.28)); transition: transform 0.45s ease, filter 0.45s ease; }
+    .card-photo-wrapper:hover .card-photo { transform: rotateY(-15deg) rotateX(6deg); filter: drop-shadow(0 14px 32px rgba(0,0,0,0.38)); }
+    .card-photo-mask {
+      width: 100%; height: 100%;
+      -webkit-mask-image: url('https://www.figma.com/api/mcp/asset/75538f92-bc10-460e-b007-814f7c618d77');
+      mask-image: url('https://www.figma.com/api/mcp/asset/75538f92-bc10-460e-b007-814f7c618d77');
+      -webkit-mask-size: 201px 120px; mask-size: 201px 120px;
+      -webkit-mask-position: 6px 0; mask-position: 6px 0;
+      -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    }
+    .card-photo-mask img { width: 100%; height: 100%; object-fit: fill; display: block; transition: transform 0.45s ease; }
+    .card-photo-wrapper:hover .card-photo-mask img { transform: none; }
+
+
+    /* ══════════════════════════════════════
+       3. PROJECTS
+    ══════════════════════════════════════ */
+    .projects {
+      position: relative; width: 1440px; height: 490px;
+      background: #f2f0f0; transform-origin: top left;
+    }
+    #w-projects { overflow: hidden; }
+
+    /* Scrollable cards-only track (header/tabs sit outside and stay fixed) */
+    #proj-scroll {
+      position: absolute; top: 0; left: 0;
+      width: 1440px; height: 490px;
+      overflow-x: auto; overflow-y: hidden;
+      scrollbar-width: none;
+    }
+    #proj-scroll::-webkit-scrollbar { display: none; }
+    #proj-inner {
+      position: relative; width: 4378px; height: 490px;
+    }
+
+    .tab {
+      position: absolute; top: 101px;
+      font-size: 16px; font-weight: 300; color: #686868;
+      text-transform: uppercase; line-height: 17px;
+      cursor: pointer; white-space: nowrap;
+      transform: translateX(-50%);
+      transition: color 0.25s ease; user-select: none;
+    }
+    .tab.active { font-weight: 400; color: #970c09; }
+    .tab:hover:not(.active) { color: #301616; }
+
+    .tab-underline {
+      position: absolute; top: 133px; height: 1px; background: #970c09;
+      transition: left 0.3s cubic-bezier(0.25,0.46,0.45,0.94), width 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+
+    .proj-img {
+      position: absolute; top: 167px; width: 300px; height: 185px;
+      border-radius: 8px; overflow: hidden; cursor: pointer; display: block;
+      transition: opacity 0.65s ease, transform 0.65s ease, filter 0.35s ease;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.12));
+      opacity: 0;
+      transform: translateY(32px);
+    }
+    .proj-img.in-view { opacity: 1; transform: translateY(0); }
+    .proj-img.in-view:hover { transform: translateY(-6px); filter: drop-shadow(0 14px 28px rgba(0,0,0,0.2)); }
+    .proj-img img  { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+
+    .proj-company { position: absolute; top: 370px; font-size: 12px; font-weight: 400; color: #0c0c0c; text-transform: uppercase; line-height: 16px; }
+
+    .proj-action { position: absolute; top: 366px; display: flex; align-items: center; gap: 4px; cursor: pointer; text-decoration: none; }
+    .proj-view   { font-size: 12px; font-weight: 400; color: #0c0c0c; text-transform: uppercase; line-height: 16px; text-decoration: none; position: relative; padding-bottom: 3px; }
+    .proj-view::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; background: #0c0c0c; transition: width 0.25s ease; }
+    .proj-action:hover .proj-view::after { width: 57px; }
+    .proj-arrow-icon { width: 23px; height: 23px; flex-shrink: 0; transition: transform 0.35s ease; }
+    .proj-action:hover .proj-arrow-icon { transform: rotate(45deg); }
+
+    .swipe-text { position: absolute; left: 144px; top: 443px; font-size: 16px; font-weight: 300; color: #686868; text-transform: uppercase; line-height: 17px; }
+    .swipe-arrow-chevron { position: absolute; left: 407px; top: 444px; display: block; width: 16px; height: 15px; }
+
+
+    /* ══════════════════════════════════════
+       4. APPROACH (FROM IDEA TO IMPACT)
+    ══════════════════════════════════════ */
+    .approach {
+      position: relative; width: 1440px; height: 245px;
+      background: #1f0504; transform-origin: top left; overflow: hidden;
+    }
+    .glow { position: absolute; left: 12px; top: -56px; width: 1416px; height: 357px; pointer-events: none; }
+    .glow img { width: 100%; height: 100%; display: block; }
+
+    .approach .s-desc {
+      position: absolute; left: 144px; top: 154px; width: 219px;
+      font-size: 14px; font-weight: 300; color: #cfcfcf; line-height: 18px;
+    }
+
+    .step-num  { position: absolute; top: 42px; font-size: 25px; font-weight: 300; color: #ffffff; text-transform: uppercase; line-height: 35px; }
+    .step-conn-wrap {
+      position: absolute; top: 55px;
+      width: 120px; height: 9px;
+      pointer-events: none;
+    }
+    .step-conn-dot {
+      position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+      width: 5px; height: 5px; border-radius: 50%; background: #9a0607;
+      opacity: 0;
+    }
+    .step-conn-line {
+      position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+      height: 1px; background: rgba(255,255,255,0.55); width: 0;
+      max-width: 115px;
+    }
+    .step-name {
+      position: absolute; top: 92px; font-size: 20px; font-weight: 300;
+      color: #ffffff; text-transform: uppercase; line-height: 20px;
+      cursor: default; transform-origin: left center; transition: transform 0.8s ease;
+    }
+    .step-name:hover { transform: scale(1.07); }
+    .step-desc { position: absolute; top: 128px; width: 127px; font-size: 14px; font-weight: 300; color: #cfcfcf; line-height: 18px; }
+
+
+    /* ══════════════════════════════════════
+       5. CTA (LET'S CREATE SOMETHING GREAT)
+    ══════════════════════════════════════ */
+    .cta {
+      position: relative; width: 1440px; height: 190px;
+      background: #f2f0f0; transform-origin: top left;
+    }
+    .cta .s-desc {
+      position: absolute; left: 639px; top: 67px; width: 219px;
+      font-size: 16px; font-weight: 300; color: #0c0c0c; line-height: 20px;
+    }
+    .cta-btn {
+      position: absolute; left: 953px; top: 62px; width: 270px; height: 66px;
+      background: #9a0607; border-radius: 10px;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 36px;
+      cursor: pointer; text-decoration: none; transition: background 0.3s ease;
+    }
+    .cta-btn:hover { background: #7d0505; }
+    .cta-btn-label { font-size: 15px; font-weight: 400; color: #ffffff; text-transform: uppercase; letter-spacing: 0.3px; line-height: 15px; }
+    .cta-btn-arrow { width: 33px; height: 33px; flex-shrink: 0; transition: transform 0.35s ease; }
+    .cta-btn:hover .cta-btn-arrow { transform: rotate(45deg); }
+
+
+    /* ══════════════════════════════════════
+       6. FOOTER
+    ══════════════════════════════════════ */
+    .footer {
+      position: relative; width: 1440px; height: 330px;
+      background: #060605; transform-origin: top left;
+    }
+
+    .ft-logo-mark { position: absolute; left: 80px;    top: 49px; width: 32px; height: 35px; display: block; }
+    .ft-logo-text { position: absolute; left: 119px;   top: 54px; width: 38px; height: 24px; display: block; }
+    .ft-desc      { position: absolute; left: 80px;    top: 114px; width: 260px; font-size: 16px; font-weight: 300; color: #cfcfcf; line-height: 20px; }
+
+    .social-link { position: absolute; top: 217px; font-size: 14px; font-weight: 300; color: #cfcfcf; text-transform: uppercase; line-height: 20px; text-decoration: none; transition: color 0.25s ease; }
+    .social-link:hover { color: #ffffff; }
+
+    .nav-header { position: absolute; top: 47px; font-size: 16px; font-weight: 300; color: #ffffff; text-transform: uppercase; line-height: 20px; }
+
+    .nav-links { position: absolute; top: 89px; font-size: 13px; font-weight: 300; color: #cfcfcf; text-transform: uppercase; line-height: 30px; list-style: none; }
+    .nav-links a { color: #cfcfcf; text-decoration: none; display: block; transition: color 0.25s ease; }
+    .nav-links a:hover { color: #ffffff; }
+
+    .contact-links { position: absolute; left: 935px; top: 89px; font-size: 13px; font-weight: 300; color: #cfcfcf; line-height: 30px; list-style: none; }
+    .contact-links a { color: #cfcfcf; text-decoration: none; display: block; transition: color 0.25s ease; }
+    .contact-links a:hover { color: #ffffff; }
+
+    .lets-talk-arrow { position: absolute; left: 1166px; top: 85px; width: 40px; height: 40px; display: block; transition: transform 0.35s ease; cursor: pointer; }
+    .lets-talk-arrow:hover { transform: rotate(45deg); }
+
+    .footer-copy  { position: absolute; left: 80px; top: 291px; font-size: 14px; font-weight: 300; color: #cfcfcf; line-height: 20px; }
+    .footer-legal { position: absolute; top: 291px; font-size: 14px; font-weight: 300; color: #cfcfcf; text-transform: uppercase; line-height: 20px; text-decoration: none; transition: color 0.25s ease; }
+    .footer-legal:hover { color: #ffffff; }
+
+
+
+    /* ══════════════════════════════════════
+       MOBILE
+    ══════════════════════════════════════ */
+    #mobile-site { display: none; }
+    .m-wrapper   { width: 100vw; overflow: hidden; }
+    @media (max-width: 768px) {
+      .hero-wrapper, .section-wrapper { display: none !important; }
+      #mobile-site { display: block; }
+    }
+
+    /* ── Mobile Hero: sticky scrub zone ── */
+    #m-scrub-zone {
+      position: relative;
+      height: 200vh;
+    }
+
+    #mw-hero-vid {
+      position: sticky;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: url('frames/frame_0001.jpg') center/cover no-repeat #030303;
+    }
+
+    #mHeroCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      display: block;
+    }
+
+    .m-hero-vid-grad {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 45%, #030303 100%);
+      z-index: 1;
+    }
+
+    /* Scaled 390px UI overlay: logo, hamburger, headline, desc */
+    .m-hero-vid-ui {
+      position: absolute;
+      top: 0; left: 0;
+      width: 390px;
+      transform-origin: top left;
+      z-index: 2;
+    }
+
+    /* ── Mobile Hero: cards (after video zone) ── */
+    #mw-hero-cards { background: #030303; }
+    .m-hero-cards {
+      position: relative;
+      width: 390px;
+      height: 705px;
+      background: #030303;
+      transform-origin: top left;
+    }
+
+    .m-logo {
+      position: absolute;
+      left: 25px; top: 25px;
+      display: flex; align-items: center; gap: 9px;
+    }
+    .m-logo-mark { width: 38.51px; height: 41.96px; }
+    .m-logo-text  { width: 44.98px; height: 28.19px; }
+
+    .m-hamburger {
+      position: absolute;
+      left: 326px; top: 22px;
+      width: 45px; height: 45px;
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .m-hamburger.menu-open { transform: rotate(-90deg); }
+
+    .m-headline {
+      position: absolute;
+      left: 21px; bottom: 130px; top: auto;
+      font-size: 40px; font-weight: 300;
+      color: white; text-transform: uppercase;
+      line-height: 41px;
+    }
+    .m-hl-line { display: block; opacity: 0; }
+
+    .m-hero-desc {
+      position: absolute;
+      left: 22px; bottom: 30px; top: auto;
+      width: 269px;
+      font-size: 20px; font-weight: 300;
+      color: white; line-height: 25px;
+      opacity: 0;
+    }
+
+    body.hero-ready .m-hl-line { animation: slideInLeft 0.7s cubic-bezier(0.25,0.46,0.45,0.94) forwards; }
+    body.hero-ready .m-hl-line:nth-child(1) { animation-delay: 0.05s; }
+    body.hero-ready .m-hl-line:nth-child(2) { animation-delay: 0.13s; }
+    body.hero-ready .m-hl-line:nth-child(3) { animation-delay: 0.21s; }
+    body.hero-ready .m-hero-desc { animation: slideInLeft 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.25s forwards; }
+
+    /* Stats card */
+    .m-stats-card {
+      position: absolute;
+      left: 20px; top: 0px;
+      width: 351px; height: 193px;
+      background: white; border-radius: 15px;
+    }
+    .m-stats-asterisk {
+      position: absolute;
+      left: 27px; top: 30px;
+      width: 27px; height: 27px;
+    }
+    .m-stats-label {
+      position: absolute;
+      left: 72px; top: 27px;
+      font-size: 18px; font-weight: 300;
+      color: black; line-height: 20px;
+    }
+    .m-stats-num {
+      position: absolute;
+      left: 27px; top: 86px;
+      font-size: 60px; font-weight: 300;
+      color: black; line-height: 60px;
+    }
+    .m-stats-sub {
+      position: absolute;
+      left: 27px; top: 155px;
+      font-size: 18px; font-weight: 300;
+      color: black; line-height: 20px;
+    }
+
+    /* CTA card */
+    .m-cta-card {
+      position: absolute;
+      left: 20px; top: 213px;
+      width: 351px; height: 115px;
+      border-radius: 15px; overflow: hidden;
+      cursor: pointer;
+    }
+    .m-cta-bg {
+      position: absolute;
+      inset: 0; width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .m-cta-text {
+      position: absolute;
+      left: 23px; top: 33px;
+      width: 162px;
+      font-size: 22px; font-weight: 300;
+      color: white; line-height: 25px;
+    }
+    .m-cta-arrow {
+      position: absolute;
+      right: 23px; top: 20px;
+      width: 55px; height: 55px;
+      transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .m-cta-arrow.rotated { transform: rotate(-45deg); }
+
+    /* Bottom headline */
+    .m-btm-headline {
+      position: absolute;
+      left: 21px; top: 403px;
+      font-size: 46px; font-weight: 300;
+      color: white; text-transform: uppercase;
+      line-height: 50px;
+    }
+    .m-bhl-line { display: block; }
+
+    .m-btm-desc {
+      position: absolute;
+      left: 21px; top: 573px;
+      width: 229px;
+      font-size: 18px; font-weight: 300;
+      color: white; line-height: 20px;
+    }
+    .m-btm-arrow-link {
+      position: absolute;
+      left: 293px; top: 595px;
+      width: 55px; height: 55px;
+      display: block;
+    }
+    .m-btm-arrow {
+      width: 55px; height: 55px;
+      transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .m-btm-arrow.rotated { transform: rotate(-45deg); }
+
+    /* ── Mobile nav overlay ── */
+    .m-nav-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      width: 100vw;
+      height: calc(100vh - 115px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.10);
+      border-radius: 0 0 24px 24px;
+      transform: translateY(-100%);
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      /* Flex layout to centre content */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .m-nav-overlay.open { transform: translateY(0); }
+
+    /* Hide old bg texture image */
+    .m-nav-bg { display: none; }
+
+    .m-nav-close-btn {
+      position: absolute;
+      right: 20px; top: 20px;
+      width: 38px; height: 38px;
+      cursor: pointer; z-index: 2;
+      transition: transform 0.25s ease;
+    }
+    .m-nav-close-btn:hover { transform: rotate(90deg); }
+
+    .m-nav-links-wrap {
+      display: flex; flex-direction: column;
+      align-items: center;
+    }
+    .m-nav-links-wrap a {
+      font-size: 22px; font-weight: 300;
+      color: white; text-decoration: none;
+      text-transform: uppercase;
+      line-height: 65px;
+      transition: color 0.2s ease;
+    }
+    .m-nav-links-wrap a:hover  { color: #9a0607; }
+    .m-nav-links-wrap a:active { color: #9a0607; }
+
+    .m-nav-lang {
+      display: flex;
+      margin-top: 32px;
+    }
+    .m-nav-lang-btn {
+      width: 39px; height: 39px;
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 50%;
+      background: transparent;
+      color: white; font-size: 12px; font-weight: 300;
+      text-transform: uppercase; letter-spacing: 0.3px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s ease, color 0.2s ease;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    .m-nav-lang-btn + .m-nav-lang-btn { margin-left: 4px; }
+    .m-nav-lang-btn:hover,
+    .m-nav-lang-btn.active { background: white; color: #0c0c0c; }
+
+    .m-nav-logo-mark {
+      width: 25px; height: 27px;
+      margin-top: 108px;
+      transform: scaleY(-1);   /* flip vertically */
+    }
+
+    /* ══════════════════════════════════════
+       MOBILE — APPROACH
+    ══════════════════════════════════════ */
+    #mw-approach-mob { background: #1f0504; }
+
+    .m-approach {
+      position: relative;
+      width: 390px;
+      height: 905px;
+      background: #1f0504;
+      transform-origin: top left;
+    }
+
+    .m-appr-asterisk { position: absolute; left: 21px; top: 40px; width: 40px; height: 41px; }
+    .m-appr-label {
+      position: absolute; left: 93px; top: 53px;
+      font-size: 15px; font-weight: 400; color: white;
+      text-transform: uppercase; line-height: 16px;
+    }
+    .m-appr-title {
+      position: absolute; left: 21px; top: 105px;
+      font-size: 36px; font-weight: 300; color: white;
+      text-transform: uppercase; line-height: 35px; width: 231px;
+    }
+    .m-appr-intro {
+      position: absolute; left: 21px; top: 199px;
+      font-size: 18px; font-weight: 300; color: #cfcfcf;
+      line-height: 20px; width: 278px;
+    }
+
+    /* Vertical line — grows from top via JS */
+    .m-appr-vline {
+      position: absolute;
+      left: 86px; top: 305px;
+      width: 2px; height: 0;
+      background: linear-gradient(to bottom, rgba(190,55,55,0.85), rgba(100,20,20,0.35));
+      z-index: 1;
+    }
+
+    /* Dots — CSS circles, start dim, go red when lit */
+    .m-appr-dot {
+      position: absolute; left: 82px;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      z-index: 2;
+      transition: background 0.45s ease, box-shadow 0.45s ease;
+    }
+    .m-appr-dot.lit {
+      background: #970c09;
+      box-shadow: 0 0 7px rgba(151,12,9,0.75);
+    }
+    .m-appr-dot-sm {
+      position: absolute; left: 85px;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      z-index: 2;
+      transition: background 0.45s ease;
+    }
+    .m-appr-dot-sm.lit { background: #970c09; }
+
+    /* Step group — fades in + slides up */
+    .m-appr-step-group {
+      position: absolute; left: 0; width: 390px;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .m-appr-step-group.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Step elements (relative to group) */
+    .m-appr-num {
+      position: absolute; left: 23px; top: 0; width: 38px;
+      font-size: 28px; font-weight: 300; color: white;
+      text-transform: uppercase; line-height: 35px;
+    }
+    .m-appr-name {
+      position: absolute; left: 118px; width: 127px;
+      font-size: 20px; font-weight: 300; color: white;
+      text-transform: uppercase; line-height: 20px;
+    }
+    .m-appr-step-desc {
+      position: absolute; left: 118px; width: 218px;
+      font-size: 16px; font-weight: 300; color: #cfcfcf;
+      line-height: 20px;
+    }
+
+    /* ══════════════════════════════════════
+       MOBILE — CTA
+    ══════════════════════════════════════ */
+    #mw-cta { background: #f0f0f0; }
+
+    .m-cta-section {
+      position: relative;
+      width: 390px;
+      height: 446px;
+      background: #f0f0f0;
+      transform-origin: top left;
+    }
+
+    .m-cta-star {
+      position: absolute;
+      left: 21px; top: 40px;
+      width: 40px; height: 41px;
+    }
+
+    .m-cta-headline {
+      position: absolute;
+      left: 21px; top: 105px;
+      width: 311px;
+      font-size: 36px; font-weight: 300;
+      line-height: 35px;
+      color: #301616;
+      text-transform: uppercase;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .m-cta-sub {
+      position: absolute;
+      left: 21px; top: 240px;
+      width: 251px;
+      font-size: 18px; font-weight: 300;
+      line-height: 22px;
+      color: #0c0c0c;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .m-cta-btn {
+      position: absolute;
+      left: 20px; top: 336px;
+      width: 351px; height: 70px;
+      background: #9a0607;
+      border-radius: 15px;
+      display: flex; align-items: center;
+      text-decoration: none;
+      overflow: hidden;
+      transition: background 0.3s ease;
+    }
+    .m-cta-btn:hover,
+    .m-cta-btn:active { background: #7a0505; }
+
+    .m-cta-btn-text {
+      position: absolute;
+      left: 36px;
+      font-size: 15px; font-weight: 400;
+      line-height: 1;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .m-cta-btn-arrow {
+      position: absolute;
+      right: 16px;
+      width: 39px; height: 39px;
+      border: 1px solid rgba(255,255,255,0.45);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.35s ease;
+    }
+    .m-cta-btn:hover  .m-cta-btn-arrow,
+    .m-cta-btn:active .m-cta-btn-arrow { transform: rotate(45deg); }
+
+    /* ══════════════════════════════════════
+       MOBILE — FOOTER
+    ══════════════════════════════════════ */
+    #mw-footer-mob { background: #030303; }
+
+    .m-footer {
+      position: relative;
+      width: 390px;
+      height: 879px;
+      background: #030303;
+      transform-origin: top left;
+    }
+
+    .m-ftr-logo-icon { position: absolute; left: 20px; top: 40px; width: 32px; height: 35px; }
+    .m-ftr-logo-text { position: absolute; left: 59px; top: 45px; width: 38px; height: 24px; }
+
+    .m-ftr-about {
+      position: absolute; left: 20px; top: 105px;
+      width: 260px;
+      font-size: 16px; font-weight: 300;
+      line-height: 20px; color: #cfcfcf;
+    }
+
+    .m-ftr-social {
+      position: absolute; top: 206px;
+      font-size: 14px; font-weight: 300;
+      color: #cfcfcf; text-transform: uppercase;
+      text-decoration: none; line-height: 20px;
+      transition: color 0.2s ease;
+    }
+    .m-ftr-social:hover  { color: white; }
+    .m-ftr-social:active { color: white; }
+
+    .m-ftr-divider {
+      position: absolute; left: 20px; width: 351px; height: 1px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .m-ftr-heading {
+      position: absolute;
+      font-size: 16px; font-weight: 300; color: white;
+      text-transform: uppercase; line-height: 20px;
+    }
+
+    .m-ftr-nav-col {
+      position: absolute;
+      display: flex; flex-direction: column;
+    }
+    .m-ftr-nav-link {
+      font-size: 13px; font-weight: 300;
+      color: #999; text-transform: uppercase;
+      line-height: 30px; text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .m-ftr-nav-link:hover  { color: #cfcfcf; }
+    .m-ftr-nav-link:active { color: #cfcfcf; }
+
+    .m-ftr-contact-info {
+      position: absolute; left: 20px; top: 617px;
+      font-size: 13px; font-weight: 300;
+      color: #999; line-height: 30px;
+    }
+
+    .m-ftr-talk-arrow {
+      position: absolute; left: 195px; top: 613px;
+      width: 40px; height: 40px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none;
+      transition: border-color 0.3s ease, transform 0.35s ease;
+    }
+    .m-ftr-talk-arrow:hover  { border-color: rgba(255,255,255,0.7); transform: rotate(45deg); }
+    .m-ftr-talk-arrow:active { border-color: rgba(255,255,255,0.7); transform: rotate(45deg); }
+
+    .m-ftr-copy {
+      position: absolute; left: 20px; top: 787px;
+      width: 283px;
+      font-size: 14px; font-weight: 300;
+      color: #999; line-height: 20px;
+    }
+
+    .m-ftr-bottom-link {
+      position: absolute; top: 829px;
+      font-size: 12px; font-weight: 300;
+      color: #999; text-transform: uppercase;
+      line-height: 20px; text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .m-ftr-bottom-link:hover  { color: #cfcfcf; }
+    .m-ftr-bottom-link:active { color: #cfcfcf; }
+
+    /* ══════════════════════════════════════
+       MOBILE — PROJECTS
+    ══════════════════════════════════════ */
+    #mw-projects {
+      background: #f0f0f0;
+      transition: height 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .m-projects {
+      position: relative;
+      width: 390px;
+      background: #f0f0f0;
+      transform-origin: top left;
+      padding-top: 285px; /* space for absolutely-positioned header */
+    }
+
+    .m-proj-asterisk { position: absolute; left: 23px; top: 40px; width: 40px; height: 41px; }
+    .m-proj-label {
+      position: absolute; left: 95px; top: 53px;
+      font-size: 15px; font-weight: 400; color: #0c0c0c;
+      text-transform: uppercase; line-height: 16px;
+    }
+    .m-proj-title {
+      position: absolute; left: 23px; top: 105px;
+      font-size: 36px; font-weight: 300; color: #301616;
+      text-transform: uppercase; line-height: 35px; width: 311px;
+    }
+
+    /* Filter tabs */
+    .m-proj-tab {
+      position: absolute; top: 226px;
+      font-size: 18px; font-weight: 400; color: #686868;
+      text-transform: uppercase; line-height: 17px;
+      text-align: center; cursor: pointer; user-select: none;
+      transition: color 0.25s ease;
+    }
+    .m-proj-tab.active { color: #970c09; }
+    .m-proj-tab:hover:not(.active) { color: #301616; }
+
+    .m-proj-tab-underline {
+      position: absolute;
+      left: 23px; top: 258px;
+      width: 80px; height: 1px;
+      background: #970c09;
+      transition: left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* ── Cards list (flow layout) ── */
+    .m-proj-list { padding: 0 19px 52px; }
+
+    .m-proj-item {
+      display: block; text-decoration: none;
+      margin-bottom: 32px;
+    }
+
+    .m-proj-thumb {
+      width: 100%; aspect-ratio: 1200 / 740;
+      border-radius: 12px; overflow: hidden;
+    }
+    .m-proj-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform 0.4s ease;
+    }
+    .m-proj-item:hover .m-proj-thumb img { transform: scale(1.03); }
+
+    .m-proj-info {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 11px 2px 0;
+    }
+
+    .m-proj-name {
+      font-size: 14px; font-weight: 400; color: #0c0c0c;
+      text-transform: uppercase; line-height: 16px;
+    }
+
+    .m-proj-view {
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+    }
+    .m-proj-view-text {
+      font-size: 14px; font-weight: 400; color: #0c0c0c;
+      text-transform: uppercase; line-height: 16px;
+      position: relative; padding-bottom: 2px;
+    }
+    .m-proj-view-text::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 1px; background: #0c0c0c;
+      transition: width 0.25s ease;
+    }
+    .m-proj-item:hover .m-proj-view-text::after { width: 100%; }
+    .m-proj-view-arrow {
+      width: 24px; height: 24px; flex-shrink: 0;
+      transform: rotate(-45deg); transition: transform 0.35s ease;
+    }
+    .m-proj-item:hover .m-proj-view-arrow { transform: rotate(0deg); }
+
+    /* Hidden extra cards (5–11) — height animated via JS for sync with wrapper */
+    .m-proj-extra {
+      overflow: hidden;
+      max-height: 0;
+    }
+
+    /* More / Less button */
+    .m-proj-more-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; height: 50px;
+      background: transparent;
+      border: 1px solid #301616; border-radius: 6px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px; font-weight: 300; color: #301616;
+      text-transform: uppercase; letter-spacing: 0.6px;
+      cursor: pointer;
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    .m-proj-more-btn:hover { background: #970c09; border-color: #970c09; color: #f2f0f0; }
+
+    /* Arrow inside More/Less button */
+    .m-proj-btn-arrow {
+      width: 24px; height: 24px; flex-shrink: 0;
+      transform: rotate(135deg);          /* ↙ diagonal down-left (More default) */
+      transition: transform 0.35s ease, filter 0.3s ease;
+    }
+    .m-proj-more-btn:hover .m-proj-btn-arrow {
+      transform: rotate(90deg);           /* ↓ straight down on hover */
+      filter: brightness(0) invert(1);   /* white arrow on red background */
+    }
+    .m-proj-more-btn.open .m-proj-btn-arrow {
+      transform: rotate(-90deg);          /* ↑ up when Less */
+    }
+    .m-proj-more-btn.open:hover .m-proj-btn-arrow {
+      transform: rotate(-90deg);
+      filter: brightness(0) invert(1);   /* white arrow on red background */
+    }
+
+    /* ══════════════════════════════════════
+       MOBILE — SERVICES
+    ══════════════════════════════════════ */
+    #mw-services { background: #f0f0f0; }
+
+    .m-services {
+      position: relative;
+      width: 390px;
+      height: 1856px;
+      background: #f0f0f0;
+      transform-origin: top left;
+    }
+
+    /* Header */
+    .m-svc-asterisk { position: absolute; left: 20px; top: 40px; width: 40px; height: 41px; }
+    .m-svc-label {
+      position: absolute; left: 92px; top: 53px;
+      font-size: 15px; font-weight: 400; color: #0c0c0c;
+      text-transform: uppercase; line-height: 16px;
+    }
+    .m-svc-title {
+      position: absolute; left: 20px; top: 105px;
+      font-size: 36px; font-weight: 300; color: #301616;
+      text-transform: uppercase; line-height: 35px; width: 311px;
+    }
+    .m-svc-title-line { display: block; }
+    .m-svc-intro {
+      position: absolute; left: 20px; top: 201px;
+      font-size: 18px; font-weight: 300; color: #0c0c0c;
+      line-height: 22px; width: 251px;
+    }
+
+    /* Cards */
+    .m-svc-card {
+      position: absolute;
+      left: 20px; width: 351px; height: 486px;
+      background: #f0f0f0;
+      border: 1px solid #dcdcdc;
+      border-radius: 12px;
+      overflow: hidden;
+      transform: translateY(120px);
+      will-change: transform;
+    }
+    .m-svc-num {
+      position: absolute; left: 21px; top: 27px;
+      font-size: 16px; font-weight: 400; color: #970c09; line-height: 18px;
+    }
+    .m-svc-name {
+      position: absolute; left: 21px; top: 61px;
+      font-size: 25px; font-weight: 300; color: #301616;
+      text-transform: uppercase; line-height: 25px; width: 200px;
+    }
+    .m-svc-text {
+      position: absolute; left: 21px; top: 133px;
+      font-size: 16px; font-weight: 300; color: #0c0c0c;
+      line-height: 20px; width: 206px;
+    }
+
+    /* Card button */
+    .m-svc-btn {
+      position: absolute; left: 17px; top: 222px;
+      width: 315px; height: 45px;
+      background: #f1f1f1; border: 1px solid #c8c8c8;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px 0 22px;
+      cursor: pointer; text-decoration: none; overflow: hidden;
+    }
+    .m-svc-btn::before {
+      content: ''; position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+      background: #970c09; border-radius: 10px;
+      clip-path: inset(0 100% 0 0 round 10px);
+      transition: clip-path 0.4s ease; z-index: 0;
+    }
+    .m-svc-btn:hover::before { clip-path: inset(0 0% 0 0 round 10px); }
+    .m-svc-btn span {
+      font-size: 14px; font-weight: 400; color: #0c0c0c;
+      text-transform: uppercase; letter-spacing: 0.3px;
+      position: relative; z-index: 1;
+      transition: color 0.4s ease;
+    }
+    .m-svc-btn:hover span { color: white; }
+    .m-svc-btn svg { flex-shrink: 0; position: relative; z-index: 1; transition: transform 0.35s ease; }
+    .m-svc-btn svg path { transition: stroke 0.4s ease; }
+    .m-svc-btn:hover svg { transform: rotate(45deg); }
+    .m-svc-btn:hover svg path { stroke: white; }
+
+    /* Card image with mask */
+    .m-svc-img-wrap {
+      position: absolute;
+      left: 13px; top: 285px;
+      width: 319px; height: 185px;
+      -webkit-mask-image: url('https://www.figma.com/api/mcp/asset/2cef63d1-a9cc-47ed-a6c3-3ac9b264acd3');
+      mask-image: url('https://www.figma.com/api/mcp/asset/2cef63d1-a9cc-47ed-a6c3-3ac9b264acd3');
+      -webkit-mask-size: 313px 180px;
+      mask-size: 313px 180px;
+      -webkit-mask-position: 6px 5px;
+      mask-position: 6px 5px;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+    .m-svc-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: fill;
+      display: block;
+    }
+
+  </style>
+
+  <!-- ══ LOADER STYLES ══ -->
+  <style>
+    /* ── Loader shell ── */
+    #loader { position: fixed; inset: 0; background: #f2f0f0; z-index: 9999; }
+    #lFade  { position: absolute; inset: 0; background: #f2f0f0; opacity: 0; pointer-events: none; }
+
+    /* ── Stage (desktop 1440px base) ── */
+    #lStage { position: absolute; top: 0; left: 0; width: 1440px; transform-origin: top left; }
+
+    /* ── Cylinder text reveal ── */
+    .l-clip { display: inline-block; overflow: hidden; perspective: 350px; vertical-align: top; }
+    .l-reveal {
+      display: block;
+      transform: rotateX(-80deg); transform-origin: 50% 100%;
+      opacity: 0;
+      transition: transform 0.9s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease 0.2s;
+    }
+    .l-reveal.on { transform: rotateX(0deg); opacity: 1; }
+    .l-reveal.l-delay-2 { transition: transform 0.9s cubic-bezier(0.22,1,0.36,1) 0.15s, opacity 0.3s ease 0.35s; }
+    .l-reveal.l-delay-3 { transition: transform 0.9s cubic-bezier(0.22,1,0.36,1) 0.30s, opacity 0.3s ease 0.50s; }
+
+    /* ── Slide-in left ── */
+    .l-slide-left { display: block; transform: translateX(-60px); opacity: 0;
+      transition: transform 0.8s cubic-bezier(0.22,1,0.36,1), opacity 0.5s ease; }
+    .l-slide-left.l-delay-2 { transition: transform 0.8s cubic-bezier(0.22,1,0.36,1) 0.15s, opacity 0.5s ease 0.15s; }
+    .l-slide-left.l-delay-3 { transition: transform 0.8s cubic-bezier(0.22,1,0.36,1) 0.30s, opacity 0.5s ease 0.30s; }
+    .l-slide-left.on { transform: translateX(0); opacity: 1; }
+
+    /* ── Slide-in right ── */
+    .l-slide-right { display: block; transform: translateX(60px); opacity: 0;
+      transition: transform 0.8s cubic-bezier(0.22,1,0.36,1), opacity 0.5s ease; }
+    .l-slide-right.l-delay-2 { transition: transform 0.8s cubic-bezier(0.22,1,0.36,1) 0.15s, opacity 0.5s ease 0.15s; }
+    .l-slide-right.on { transform: translateX(0); opacity: 1; }
+
+    /* ── Left label (desktop) ── */
+    .l-left-label {
+      position: absolute; left: 30px; top: 39%;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 16px; font-weight: 300; line-height: 19px;
+      color: #0c0c0c; text-transform: uppercase;
+    }
+    .l-left-label .l-clip { display: block; }
+
+    /* ── Percentage (hidden) ── */
+    .l-percent {
+      position: absolute; left: 133px; top: calc(39% + 9px);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 40px; font-weight: 300; line-height: 40px;
+      color: #9a0607; visibility: hidden;
+    }
+
+    /* ── Right label (desktop) ── */
+    .l-right-label {
+      position: absolute; right: 30px; top: 44%;
+      transform: translateY(-50%);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 16px; font-weight: 300; line-height: 19px;
+      color: #0c0c0c; text-transform: uppercase; text-align: right;
+    }
+
+    /* ── Bottom tagline (desktop) ── */
+    .l-bottom {
+      position: absolute; left: 548px; top: 93%;
+      transform: translateY(-50%); width: 344px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px; font-weight: 300; line-height: 19px;
+      color: #0c0c0c; text-align: center;
+    }
+
+    /* ── Card container ── */
+    #lCardWrap { position: absolute; left: 720px; width: 110px; transform: translate(-50%,-50%); overflow: visible; }
+
+    /* ── Cards ── */
+    .l-card { position: absolute; top: 0; left: 0; width: 110px; height: 110px;
+      border-radius: 5px; overflow: hidden; opacity: 0; will-change: transform, opacity; }
+    .l-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* ══ MOBILE OVERRIDES (≤ 767px) ══ */
+    @media (max-width: 767px) {
+      #lStage { width: 390px; }
+      .l-left-label  { left: 20px; font-size: 11px; line-height: 14px; }
+      .l-percent     { left: 36px; font-size: 28px; line-height: 28px; }
+      .l-right-label { right: 20px; font-size: 11px; line-height: 14px; }
+      .l-bottom      { left: 50%; transform: translate(-50%,-50%); width: 270px;
+                       font-size: 10px; line-height: 14px; top: 90%; }
+      #lCardWrap     { left: 195px; width: 80px; }
+      .l-card        { width: 80px; height: 80px; }
+      .l-slide-left  { transform: translateX(-40px); }
+      .l-slide-right { transform: translateX(40px); }
+    }
+  </style>
 </head>
 <body>
 
-<section class="hero">
+  <!-- ══ LOADER ══ -->
+  <div id="loader">
+    <div id="lStage">
 
-    <!-- Background (replace gradient with hero.jpg when ready) -->
-    <div class="hero-bg"></div>
+      <div class="l-left-label" id="tLeft">
+        <div class="l-clip"><span class="l-slide-left">Loading</span></div>
+        <div class="l-clip"><span class="l-slide-left l-delay-2">Creative</span></div>
+        <div class="l-clip"><span class="l-slide-left l-delay-3">Systems</span></div>
+      </div>
 
-    <!-- Navigation -->
-    <nav>
-        <a href="#" class="logo">
-            <!-- Logo placeholder — swap with your SVG file -->
-            <svg class="logo-mark" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9 1H37L45 9V37L37 45H9L1 37V9L9 1Z"
-                      stroke="white" stroke-width="1.4"/>
-                <path d="M15 13H31M15 13V33M15 22H27"
-                      stroke="white" stroke-width="2.2"
-                      stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span class="logo-text">FISHER<br>LABS</span>
-        </a>
+      <p class="l-percent">
+        <span class="l-clip"><span class="l-reveal" id="tPercent">0%</span></span>
+      </p>
 
-        <ul class="nav-links">
-            <li><a href="#">WORK</a></li>
-            <li><a href="#">SERVICES</a></li>
-            <li><a href="#">ABOUT</a></li>
-            <li><a href="#">PROCESS</a></li>
-            <li><a href="#">CONTACT</a></li>
-        </ul>
+      <p class="l-right-label" id="tRight">
+        <span class="l-clip" style="display:block;"><span class="l-slide-right">Digital</span></span>
+        <span class="l-clip" style="display:block;"><span class="l-slide-right l-delay-2">Experiences</span></span>
+      </p>
 
-        <div class="btn-circle btn-circle--nav">
-            <svg class="ic-arrow" viewBox="0 0 15 15" fill="none">
-                <path d="M2.5 12.5L12.5 2.5M12.5 2.5H4.5M12.5 2.5V10.5"
-                      stroke="white" stroke-width="1.5"
-                      stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+      <p class="l-bottom">
+        <span class="l-clip" style="display:block;">
+          <span class="l-reveal" id="tBottom">A creative digital studio crafting immersive websites,<br>visual identities and modern brand systems</span>
+        </span>
+      </p>
+
+      <div id="lCardWrap"></div>
+
+    </div>
+    <div id="lFade"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       1. HERO
+  ══════════════════════════════════════ -->
+  <div id="hero-scrub-zone">
+  <div class="hero-wrapper" id="w-hero">
+
+    <!-- Frame sequence background (scroll-scrubbed) -->
+    <canvas id="heroCanvas" class="hero-video-bg"></canvas>
+    <div class="hero-video-grad"></div>
+
+    <section class="hero">
+
+      <div class="logo">
+        <img class="logo-icon"     src="https://www.figma.com/api/mcp/asset/14229c15-987e-4a11-8320-01cccda3a04d" alt="Fisher Labs">
+        <img class="logo-wordmark" src="https://www.figma.com/api/mcp/asset/b7a70e69-8934-4267-b4c8-e3161eb5e55f" alt="Fisher Labs">
+      </div>
+
+      <a class="nav-link" style="left:861px"  href="#w-services">Services</a>
+      <a class="nav-link" style="left:956px"  href="#w-projects">Work</a>
+      <a class="nav-link" style="left:1020px" href="#w-approach">Process</a>
+      <a class="nav-link" style="left:1108px" href="#w-cta">Start Project</a>
+      <a class="nav-link" style="left:1237px" href="#w-footer">Contact</a>
+
+      <div class="lang-selector" id="langSelector">
+        <div class="lang-btn" id="langToggle">ENG</div>
+        <div class="lang-dropdown">
+          <div class="lang-option">RU</div>
         </div>
+      </div>
+
+      <div class="headline-left">
+        <span class="line">Sourse</span>
+        <span class="line">of bold</span>
+        <span class="line">ideas/</span>
+      </div>
+      <p class="desc-left">We design digital experiences, brands and creative solutions that drive results</p>
+
+      <div class="card-stats">
+        <img class="card-stats-icon" src="https://www.figma.com/api/mcp/asset/b75a50f8-ece8-462f-9eb3-5ff0cc82f657" alt="">
+        <div class="card-stats-label">Projects<br>completed</div>
+        <div class="card-stats-number">95%</div>
+        <div class="card-stats-sub">Client satisfaction rate</div>
+      </div>
+
+      <a class="card-cta" href="#w-services">
+        <img class="card-cta-bg" src="https://www.figma.com/api/mcp/asset/d9d160f4-c15e-4b9e-b5d5-bcec4aaf4b09" alt="">
+        <p class="card-cta-text">Let's build something great</p>
+        <div class="card-cta-btn">
+          <svg width="13" height="10" viewBox="0 0 13 10" fill="none">
+            <path d="M12 5H1M1 5L5 1M1 5L5 9" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+
+      <div class="headline-right">
+        <span class="line">Creative</span>
+        <span class="line">web design</span>
+        <span class="line">studio</span>
+      </div>
+      <p class="desc-right">We create modern websites, brand identities and digital solutions that help businesses stand out</p>
+
+      <a class="arrow-btn" href="#w-services">
+        <svg width="20" height="14" viewBox="0 0 20 14" fill="none">
+          <path d="M19 7H1M1 7L7 1M1 7L7 13" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+
+    </section>
+  </div>
+  </div><!-- /hero-scrub-zone -->
+
+
+  <!-- ══════════════════════════════════════
+       2. SERVICES
+  ══════════════════════════════════════ -->
+  <div class="section-wrapper" id="w-services">
+    <section class="services">
+
+      <img class="s-asterisk" src="https://www.figma.com/api/mcp/asset/78c5acac-a136-46d9-a99d-04998503076b" alt="">
+      <p class="s-label">What we do</p>
+      <div class="s-title">
+        <span class="s-title-line">Services that</span>
+        <span class="s-title-line">drive results</span>
+      </div>
+      <p class="s-desc">We combine creativity, strategy and technology to deliver digital solutions that help your brand grow and stand out</p>
+
+      <!-- Card 1 -->
+      <div class="card" style="left: 80px">
+        <span class="card-num">01</span>
+        <div class="card-title">Web design<br>&amp; development</div>
+        <p class="card-text">Modern, responsive and conversion-focused websites that deliver results</p>
+        <a class="card-btn" href="#">
+          <span>Write for details</span>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="#0c0c0c" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <!-- Card 2 -->
+      <div class="card" style="left: 520px">
+        <span class="card-num">02</span>
+        <div class="card-title">Advertising<br>creatives</div>
+        <p class="card-text">Scroll-stopping ads and visual content that capture attention and drive action</p>
+        <a class="card-btn" href="#">
+          <span>Write for details</span>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="#0c0c0c" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <!-- Card 3 -->
+      <div class="card" style="left: 960px">
+        <span class="card-num">03</span>
+        <div class="card-title">Branding<br>&amp; identity</div>
+        <p class="card-text">Strong brands start with strategy. We build identities that leave a lasting impact</p>
+        <a class="card-btn" href="#">
+          <span>Write for details</span>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="#0c0c0c" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <!-- Photos -->
+      <div class="card-photo-wrapper" style="left: 284px"><div class="card-photo"><div class="card-photo-mask"><img src="case-karyna.webp" alt=""></div></div></div>
+      <div class="card-photo-wrapper" style="left: 724px"><div class="card-photo"><div class="card-photo-mask"><img src="adversting.webp" alt=""></div></div></div>
+      <div class="card-photo-wrapper" style="left:1164px"><div class="card-photo"><div class="card-photo-mask"><img src="presentation-ruotes.webp" alt=""></div></div></div>
+
+    </section>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       3. SELECTED PROJECTS
+  ══════════════════════════════════════ -->
+  <div class="section-wrapper" id="w-projects">
+    <section class="projects">
+
+      <!-- ── Scrollable cards track (sits behind header/tabs) ── -->
+      <div id="proj-scroll">
+        <div id="proj-inner">
+
+          <!-- ── WEBSITES (11 cases) ── -->
+          <div class="proj-group" id="pg-websites">
+
+            <a class="proj-img" style="left:  80px" href="https://www.figma.com/proto/H9UWCrgans6Xhb1LFbe6Bg/Taras-Hrytskiv-web-design--desctop---mob-?node-id=40-795&viewport=514%2C208%2C0.11&t=No3vuBCYuV1TNSgo-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-727.webp" alt=""></a>
+            <p class="proj-company" style="left:  80px">Mentorship Program</p>
+            <a class="proj-action" style="left: 292px" href="https://www.figma.com/proto/H9UWCrgans6Xhb1LFbe6Bg/Taras-Hrytskiv-web-design--desctop---mob-?node-id=40-795&viewport=514%2C208%2C0.11&t=No3vuBCYuV1TNSgo-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Site</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left: 406px" href="https://www.figma.com/proto/USwYK5ysW510RFGHQsBTqP/%D0%AF%D0%BD-%D0%92%D0%BE%D1%81%D0%BA%D1%80%D0%B5%D1%81%D0%B5%D0%BD%D1%81%D1%8C%D0%BA%D0%B8%D0%B9?node-id=339-39&viewport=355%2C495%2C0.05&t=qY2q5bvnOpBtZxrb-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-725.webp" alt=""></a>
+            <p class="proj-company" style="left: 406px">Online Course</p>
+            <a class="proj-action" style="left: 618px" href="https://www.figma.com/proto/USwYK5ysW510RFGHQsBTqP/%D0%AF%D0%BD-%D0%92%D0%BE%D1%81%D0%BA%D1%80%D0%B5%D1%81%D0%B5%D0%BD%D1%81%D1%8C%D0%BA%D0%B8%D0%B9?node-id=339-39&viewport=355%2C495%2C0.05&t=qY2q5bvnOpBtZxrb-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Site</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left: 732px" href="https://www.figma.com/proto/7JFUHyDcXVFGw5xz9bulQp/Zubalenok?node-id=0-3&viewport=371%2C323%2C0.1&t=35O3zmmFBotdAbB9-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-726.webp" alt=""></a>
+            <p class="proj-company" style="left: 732px">Fitness Workshop</p>
+            <a class="proj-action" style="left: 944px" href="https://www.figma.com/proto/7JFUHyDcXVFGw5xz9bulQp/Zubalenok?node-id=0-3&viewport=371%2C323%2C0.1&t=35O3zmmFBotdAbB9-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Site</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:1058px" href="https://www.figma.com/proto/4fRfB8jkVsEemBeXMIWiYv/%D0%A4%D0%BE%D1%80%D0%BC%D0%B0%D0%BB%D0%B0-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%BE%D0%B2-%D0%98%D0%BD%D1%84%D0%BE%D0%BF%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%82%D0%BE%D0%B2--%D1%81%D0%B0%D0%B9%D1%82-?node-id=1-2&viewport=496%2C139%2C0.03&t=lmuHgfXHgDD3hCaY-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-729.webp" alt=""></a>
+            <p class="proj-company" style="left:1058px">Infoproduct Launch</p>
+            <a class="proj-action" style="left:1270px" href="https://www.figma.com/proto/4fRfB8jkVsEemBeXMIWiYv/%D0%A4%D0%BE%D1%80%D0%BC%D0%B0%D0%BB%D0%B0-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%BE%D0%B2-%D0%98%D0%BD%D1%84%D0%BE%D0%BF%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%82%D0%BE%D0%B2--%D1%81%D0%B0%D0%B9%D1%82-?node-id=1-2&viewport=496%2C139%2C0.03&t=lmuHgfXHgDD3hCaY-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Site</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:1384px" href="https://www.figma.com/proto/DUyF9PxxiXnmAzSanhLIKz/Zubalenok-%D1%81%D0%B0%D0%B9%D1%82--%D0%94%D0%B5%D1%81%D0%BA%D1%82%D0%BE%D0%BF---%D0%BC%D0%BE%D0%B1-?node-id=1984-2&viewport=-32%2C2705%2C0.35&t=BpLwvyxtMKh979Yj-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-728.webp" alt=""></a>
+            <p class="proj-company" style="left:1384px">Course Bundle</p>
+            <a class="proj-action" style="left:1596px" href="https://www.figma.com/proto/DUyF9PxxiXnmAzSanhLIKz/Zubalenok-%D1%81%D0%B0%D0%B9%D1%82--%D0%94%D0%B5%D1%81%D0%BA%D1%82%D0%BE%D0%BF---%D0%BC%D0%BE%D0%B1-?node-id=1984-2&viewport=-32%2C2705%2C0.35&t=BpLwvyxtMKh979Yj-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Site</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:1710px" href="https://www.figma.com/proto/L77w0CBjy3b2kYrheCsbz3/ZBL-Agency?node-id=161-2&viewport=-1021%2C311%2C0.31&t=nLIu9lvI9iDp6NeK-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-730.webp" alt=""></a>
+            <p class="proj-company" style="left:1710px">Creator Platform</p>
+            <a class="proj-action" style="left:1922px" href="https://www.figma.com/proto/L77w0CBjy3b2kYrheCsbz3/ZBL-Agency?node-id=161-2&viewport=-1021%2C311%2C0.31&t=nLIu9lvI9iDp6NeK-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Site</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:2036px" href="https://www.figma.com/proto/FQLPNicHU4fPS30EapWQyX/%D1%81%D0%B0%D0%B9%D1%82-OLIVIA-RIKLAN?node-id=22-70&viewport=-1619%2C1482%2C0.14&t=hiaW7ijjnIHSaUE4-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-734.webp" alt=""></a>
+            <p class="proj-company" style="left:2036px">Online Course</p>
+            <a class="proj-action" style="left:2248px" href="https://www.figma.com/proto/FQLPNicHU4fPS30EapWQyX/%D1%81%D0%B0%D0%B9%D1%82-OLIVIA-RIKLAN?node-id=22-70&viewport=-1619%2C1482%2C0.14&t=hiaW7ijjnIHSaUE4-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Site</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:2362px" href="https://www.figma.com/proto/CUOCa0dXO6m3rVxoWIgrMC/%D0%A1%D0%B0%D0%B9%D1%82-Zubalenok?node-id=0-3&viewport=563%2C420%2C0.18&t=mpnf4K0kp1Pgd97d-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-732.webp" alt=""></a>
+            <p class="proj-company" style="left:2362px">Course Bundle</p>
+            <a class="proj-action" style="left:2574px" href="https://www.figma.com/proto/CUOCa0dXO6m3rVxoWIgrMC/%D0%A1%D0%B0%D0%B9%D1%82-Zubalenok?node-id=0-3&viewport=563%2C420%2C0.18&t=mpnf4K0kp1Pgd97d-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Site</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:2688px" href="https://www.figma.com/proto/80xjLDgE9htYQ7PLuG3EJ4/cashinout---%D0%92%D0%B0%D0%B4%D0%B8%D0%BC?node-id=2-3&viewport=504%2C1978%2C0.14&t=p1RtrEfFvBYHZQOw-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-735.webp" alt=""></a>
+            <p class="proj-company" style="left:2688px">CashInOut</p>
+            <a class="proj-action" style="left:2900px" href="https://www.figma.com/proto/80xjLDgE9htYQ7PLuG3EJ4/cashinout---%D0%92%D0%B0%D0%B4%D0%B8%D0%BC?node-id=2-3&viewport=504%2C1978%2C0.14&t=p1RtrEfFvBYHZQOw-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Site</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:3014px" href="https://www.figma.com/proto/Ioi07rIsbXkEv590I4H0tV/Web-site-Carolina-Bath-LLC?node-id=124-733&viewport=-878%2C210%2C0.16&t=Xd2EjLXAKUBE5Kau-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-731.webp" alt=""></a>
+            <p class="proj-company" style="left:3014px">Interior Design</p>
+            <a class="proj-action" style="left:3226px" href="https://www.figma.com/proto/Ioi07rIsbXkEv590I4H0tV/Web-site-Carolina-Bath-LLC?node-id=124-733&viewport=-878%2C210%2C0.16&t=Xd2EjLXAKUBE5Kau-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Site</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:3340px" href="https://www.figma.com/proto/MQpuxS25a6N4HeXfgMjEhI/%D0%98%D1%80%D0%B8%D0%BD%D0%B0-%D0%9F%D0%BE%D0%B3%D0%BE%D0%B4%D0%B8%D0%BD%D0%B0--%D1%81%D0%B0%D0%B9%D1%82-?node-id=0-3&viewport=481%2C2452%2C0.33&t=m5PovECsXIzJmC4r-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-742.webp" alt=""></a>
+            <p class="proj-company" style="left:3340px">Online Coach</p>
+            <a class="proj-action" style="left:3552px" href="https://www.figma.com/proto/MQpuxS25a6N4HeXfgMjEhI/%D0%98%D1%80%D0%B8%D0%BD%D0%B0-%D0%9F%D0%BE%D0%B3%D0%BE%D0%B4%D0%B8%D0%BD%D0%B0--%D1%81%D0%B0%D0%B9%D1%82-?node-id=0-3&viewport=481%2C2452%2C0.33&t=m5PovECsXIzJmC4r-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Site</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:3666px" href="https://www.figma.com/proto/Dwt1JJ6mIyoXxoL9mDFd1G/%D0%9A%D0%B0%D1%80%D0%B8%D0%BD%D0%B0-%D0%A8%D0%B0%D0%BF%D0%BE%D0%B2%D0%B0%D0%BB%D1%8E%D0%BA-%D1%81%D0%B0%D0%B9%D1%82?node-id=1404-44&viewport=-3285%2C3664%2C0.56&t=uR5XI8e601kD5cnf-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-744.webp" alt=""></a>
+            <p class="proj-company" style="left:3666px">Online Course</p>
+            <a class="proj-action" style="left:3878px" href="https://www.figma.com/proto/Dwt1JJ6mIyoXxoL9mDFd1G/%D0%9A%D0%B0%D1%80%D0%B8%D0%BD%D0%B0-%D0%A8%D0%B0%D0%BF%D0%BE%D0%B2%D0%B0%D0%BB%D1%8E%D0%BA-%D1%81%D0%B0%D0%B9%D1%82?node-id=1404-44&viewport=-3285%2C3664%2C0.56&t=uR5XI8e601kD5cnf-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Site</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:3992px" href="https://www.figma.com/proto/kSTGzFzAG1GBb5TPBkhKhg/Kohan-Group-REAL-ESTATE---web-design--%D1%81%D0%B0%D0%B9%D1%82-?node-id=62-2&viewport=-1364%2C3911%2C0.44&t=9wENoieyI9U3uEdP-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=1%3A2&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-733.webp" alt=""></a>
+            <p class="proj-company" style="left:3992px">Real Estate</p>
+            <a class="proj-action" style="left:4204px" href="https://www.figma.com/proto/kSTGzFzAG1GBb5TPBkhKhg/Kohan-Group-REAL-ESTATE---web-design--%D1%81%D0%B0%D0%B9%D1%82-?node-id=62-2&viewport=-1364%2C3911%2C0.44&t=9wENoieyI9U3uEdP-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=1%3A2&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Site</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+          </div><!-- /pg-websites -->
+
+          <!-- ── BRANDING (8 cases) — links: add Figma proto URLs here ── -->
+          <div class="proj-group" id="pg-branding" style="display:none">
+
+            <a class="proj-img" style="left:  80px" href="https://www.figma.com/proto/E4gKBOX9MJAzFS1H7zrFBe/Ruotes-Logo?node-id=30-2&viewport=-2190%2C97%2C0.1&t=v4vl21iYXFjjEjJz-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-724.webp" alt=""></a>
+            <p class="proj-company" style="left:  80px">Ruotes.com</p>
+            <a class="proj-action" style="left: 292px" href="https://www.figma.com/proto/E4gKBOX9MJAzFS1H7zrFBe/Ruotes-Logo?node-id=30-2&viewport=-2190%2C97%2C0.1&t=v4vl21iYXFjjEjJz-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Work</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left: 406px" href="https://www.figma.com/proto/7suNwxn0o67D1hMOk5xhbk/Logo-Yuliana-Grunkovskaya?node-id=12-2&viewport=-173%2C149%2C0.17&t=6rLnfLLJgrfmOC7x-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-737.webp" alt=""></a>
+            <p class="proj-company" style="left: 406px">Brand Identity</p>
+            <a class="proj-action" style="left: 618px" href="https://www.figma.com/proto/7suNwxn0o67D1hMOk5xhbk/Logo-Yuliana-Grunkovskaya?node-id=12-2&viewport=-173%2C149%2C0.17&t=6rLnfLLJgrfmOC7x-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Work</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left: 732px" href="https://www.figma.com/proto/eT0SQxG0Hzg0efXKkvW3ml/Logo-presentation-EBASH?node-id=1-228&viewport=653%2C242%2C0.15&t=jZ5buSSr8yofrpSG-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-738.webp" alt=""></a>
+            <p class="proj-company" style="left: 732px">E.B.A.S.H.</p>
+            <a class="proj-action" style="left: 944px" href="https://www.figma.com/proto/eT0SQxG0Hzg0efXKkvW3ml/Logo-presentation-EBASH?node-id=1-228&viewport=653%2C242%2C0.15&t=jZ5buSSr8yofrpSG-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Work</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:1058px" href="https://www.figma.com/proto/61hmKd14fQ3iUY9K6ako2S/CarGro-Logo--%D1%87%D0%B5%D1%80%D0%BD%D0%BE%D0%B2%D0%B8%D0%BA-?node-id=2001-19&viewport=-370%2C101%2C0.17&t=QVW19d4EMcXv5m04-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-740.webp" alt=""></a>
+            <p class="proj-company" style="left:1058px">Cargro</p>
+            <a class="proj-action" style="left:1270px" href="https://www.figma.com/proto/61hmKd14fQ3iUY9K6ako2S/CarGro-Logo--%D1%87%D0%B5%D1%80%D0%BD%D0%BE%D0%B2%D0%B8%D0%BA-?node-id=2001-19&viewport=-370%2C101%2C0.17&t=QVW19d4EMcXv5m04-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Work</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:1384px" href="https://www.figma.com/proto/7SGZwvDUQHJFAs4oQ9nsLM/Horizon-estate?node-id=0-3&viewport=398%2C93%2C0.14&t=oar6QT0ILxcU1VdN-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-739.webp" alt=""></a>
+            <p class="proj-company" style="left:1384px">Horizon Estate</p>
+            <a class="proj-action" style="left:1596px" href="https://www.figma.com/proto/7SGZwvDUQHJFAs4oQ9nsLM/Horizon-estate?node-id=0-3&viewport=398%2C93%2C0.14&t=oar6QT0ILxcU1VdN-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Work</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:1710px" href="https://www.figma.com/proto/67Sl8M4eVrcP9rqAJOe3OF/Carolina-Bath-LLS--%D0%BD%D0%B0%D0%B1%D1%80%D0%BE%D1%81%D0%BA%D0%B8-?node-id=32-110&viewport=-1045%2C-458%2C0.15&t=iI7JP84LmY02z8hK-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-741.webp" alt=""></a>
+            <p class="proj-company" style="left:1710px">Carolina Bath</p>
+            <a class="proj-action" style="left:1922px" href="https://www.figma.com/proto/67Sl8M4eVrcP9rqAJOe3OF/Carolina-Bath-LLS--%D0%BD%D0%B0%D0%B1%D1%80%D0%BE%D1%81%D0%BA%D0%B8-?node-id=32-110&viewport=-1045%2C-458%2C0.15&t=iI7JP84LmY02z8hK-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Work</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:2036px" href="https://www.figma.com/proto/E4gKBOX9MJAzFS1H7zrFBe/Ruotes-Logo?node-id=71-481&viewport=-1198%2C-475%2C0.1&t=yllu7AodL3vPriCS-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-736.webp" alt=""></a>
+            <p class="proj-company" style="left:2036px">SMM Design</p>
+            <a class="proj-action" style="left:2248px" href="https://www.figma.com/proto/E4gKBOX9MJAzFS1H7zrFBe/Ruotes-Logo?node-id=71-481&viewport=-1198%2C-475%2C0.1&t=yllu7AodL3vPriCS-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Work</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left:2362px" href="https://www.figma.com/proto/zl4o4t41EGWpWv5Twqqcng/%D0%A3%D0%BF%D0%B0%D0%BA%D0%BE%D0%B2%D0%BA%D0%B0-UKR-GEO-SUPERVISION?node-id=1-2&viewport=428%2C412%2C0.24&t=ioR9LUo1IxEb6bVN-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-743.webp" alt=""></a>
+            <p class="proj-company" style="left:2362px">Supervision</p>
+            <a class="proj-action" style="left:2574px" href="https://www.figma.com/proto/zl4o4t41EGWpWv5Twqqcng/%D0%A3%D0%BF%D0%B0%D0%BA%D0%BE%D0%B2%D0%BA%D0%B0-UKR-GEO-SUPERVISION?node-id=1-2&viewport=428%2C412%2C0.24&t=ioR9LUo1IxEb6bVN-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Work</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+          </div><!-- /pg-branding -->
+
+          <!-- ── ADVERSTING (3 cases) ── -->
+          <div class="proj-group" id="pg-adversting" style="display:none">
+
+            <a class="proj-img" style="left:  80px" href="https://www.figma.com/proto/LEPyAkcAaj1rxzgjx3hSNS/Fisher-Labs-web-site?node-id=94-587&viewport=2149%2C-1193%2C0.15&t=hflvRjmGhPzpKJrn-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-745.webp" alt=""></a>
+            <p class="proj-company" style="left:  80px">Digital Education</p>
+            <a class="proj-action" style="left: 292px" href="https://www.figma.com/proto/LEPyAkcAaj1rxzgjx3hSNS/Fisher-Labs-web-site?node-id=94-587&viewport=2149%2C-1193%2C0.15&t=hflvRjmGhPzpKJrn-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Work</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left: 406px" href="https://www.figma.com/proto/LEPyAkcAaj1rxzgjx3hSNS/Fisher-Labs-web-site?node-id=94-730&viewport=2149%2C-1193%2C0.15&t=VmknKNmJlmXbnPQA-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-749.webp" alt=""></a>
+            <p class="proj-company" style="left: 406px">Cryptocurrency</p>
+            <a class="proj-action" style="left: 618px" href="https://www.figma.com/proto/LEPyAkcAaj1rxzgjx3hSNS/Fisher-Labs-web-site?node-id=94-730&viewport=2149%2C-1193%2C0.15&t=VmknKNmJlmXbnPQA-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Work</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+            <a class="proj-img" style="left: 732px" href="https://www.figma.com/proto/LEPyAkcAaj1rxzgjx3hSNS/Fisher-Labs-web-site?node-id=94-1004&viewport=2149%2C-1193%2C0.15&t=jLkuc2XBNFrIoYFZ-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><img src="frame-763.webp" alt=""></a>
+            <p class="proj-company" style="left: 732px">Products & Services</p>
+            <a class="proj-action" style="left: 944px" href="https://www.figma.com/proto/LEPyAkcAaj1rxzgjx3hSNS/Fisher-Labs-web-site?node-id=94-1004&viewport=2149%2C-1193%2C0.15&t=jLkuc2XBNFrIoYFZ-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener"><span class="proj-view">View Work</span><img class="proj-arrow-icon" src="https://www.figma.com/api/mcp/asset/3aef524f-8633-4943-98b6-ef563a29ea99" alt=""></a>
+
+          </div><!-- /pg-adversting -->
+
+        </div>
+      </div>
+
+      <!-- ── Fixed: header, tabs, swipe hint (above scroll track) ── -->
+      <img class="s-asterisk" src="https://www.figma.com/api/mcp/asset/ecc6f35f-0f09-4b65-8c94-77688f11a61e" alt="">
+      <p class="s-label">Our work</p>
+      <div class="s-title">
+        <span class="s-title-line">Selected</span>
+        <span class="s-title-line">Projects</span>
+      </div>
+
+      <span class="tab active" style="left: 981px"  data-tab="websites">Websites</span>
+      <span class="tab"        style="left: 1136px" data-tab="branding">Branding</span>
+      <span class="tab"        style="left: 1299px" data-tab="adversting">Adversting</span>
+      <div class="tab-underline" id="tabUnderline" style="left: 941px; width: 80px;"></div>
+
+      <p class="swipe-text" id="swipeText"></p>
+      <svg class="swipe-arrow-chevron" width="16" height="15" viewBox="0 0 12 11" fill="none">
+        <path d="M4.5 8.25L7.5 5.5L4.5 2.75" stroke="#B3B0B0" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+
+    </section>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       4. FROM IDEA TO IMPACT
+  ══════════════════════════════════════ -->
+  <div class="section-wrapper" id="w-approach">
+    <section class="approach">
+
+      <div class="glow"><img src="https://www.figma.com/api/mcp/asset/333ac4c6-154f-4760-89c1-927cd4fd0322" alt=""></div>
+
+      <img class="s-asterisk" src="https://www.figma.com/api/mcp/asset/950478e3-6dcd-49b4-9fac-5cc47a5716d8" alt="">
+      <p class="s-label">Our approach</p>
+      <div class="s-title">
+        <span class="s-title-line">From idea</span>
+        <span class="s-title-line">to impact</span>
+      </div>
+      <p class="s-desc">We follow a clear process to deliver high-quality digital solutions</p>
+
+      <span class="step-num"  style="left: 439px">01</span>
+      <div  class="step-conn-wrap" style="left: 494px"><div class="step-conn-dot"></div><div class="step-conn-line"></div></div>
+      <span class="step-name" style="left: 439px">Discover</span>
+      <p    class="step-desc" style="left: 439px">We learn about your business, goals and audience</p>
+
+      <span class="step-num"  style="left: 639px">02</span>
+      <div  class="step-conn-wrap" style="left: 694px"><div class="step-conn-dot"></div><div class="step-conn-line"></div></div>
+      <span class="step-name" style="left: 639px">Strategy</span>
+      <p    class="step-desc" style="left: 639px">We define the right strategy and creative direction</p>
+
+      <span class="step-num"  style="left: 839px">03</span>
+      <div  class="step-conn-wrap" style="left: 894px"><div class="step-conn-dot"></div><div class="step-conn-line"></div></div>
+      <span class="step-name" style="left: 839px">Design</span>
+      <p    class="step-desc" style="left: 839px">We create modern, functional and engaging designs</p>
+
+      <span class="step-num"  style="left:1037px">04</span>
+      <div  class="step-conn-wrap" style="left:1092px"><div class="step-conn-dot"></div><div class="step-conn-line"></div></div>
+      <span class="step-name" style="left:1037px">Develop</span>
+      <p    class="step-desc" style="left:1037px">We build fast, responsive and high-performing solutions</p>
+
+      <span class="step-num"  style="left:1235px">05</span>
+      <span class="step-name" style="left:1235px">Deliver</span>
+      <p    class="step-desc" style="left:1235px">We test, launch and support your project for success</p>
+
+    </section>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       5. LET'S CREATE SOMETHING GREAT TOGETHER
+  ══════════════════════════════════════ -->
+  <div class="section-wrapper" id="w-cta">
+    <section class="cta">
+
+      <img class="s-asterisk" src="https://www.figma.com/api/mcp/asset/b667cd13-e407-46d3-ada1-216ca356cfea" alt="">
+      <div class="s-title">
+        <span class="s-title-line">Let's create</span>
+        <span class="s-title-line">something great</span>
+        <span class="s-title-line">together</span>
+      </div>
+      <p class="s-desc">Have a project in mind? Let's talk about how we can help your brand grow and succeed.</p>
+      <a class="cta-btn" href="https://www.instagram.com/alexx.fisher/" target="_blank" rel="noopener">
+        <span class="cta-btn-label">Start a project</span>
+        <img class="cta-btn-arrow" src="https://www.figma.com/api/mcp/asset/9a8bbad2-44cf-4802-98a3-0e8423e01fa3" alt="">
+      </a>
+
+    </section>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       6. FOOTER
+  ══════════════════════════════════════ -->
+  <div class="section-wrapper" id="w-footer">
+    <footer class="footer">
+
+      <img class="ft-logo-mark" src="https://www.figma.com/api/mcp/asset/e099e264-3db7-4f6b-8d43-6fbc50543e9c" alt="Fisher Labs">
+      <img class="ft-logo-text" src="https://www.figma.com/api/mcp/asset/f9a87832-815b-430c-bf1e-dd0ae8f96170" alt="Fisher Labs">
+      <p class="ft-desc">We are a creative web design studio helping brands grow through digital design, development and strategy.</p>
+
+      <a class="social-link" style="left:  80px" href="https://www.instagram.com/alexx.fisher/" target="_blank" rel="noopener">Instagram</a>
+      <a class="social-link" style="left: 207px" href="#">Behance</a>
+      <a class="social-link" style="left: 322px" href="#">Dribble</a>
+
+      <p class="nav-header" style="left: 483px">Navigation</p>
+      <ul class="nav-links"  style="left: 483px">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Work</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Process</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+
+      <p class="nav-header" style="left: 672px">Navigation</p>
+      <ul class="nav-links"  style="left: 672px; text-transform: none;">
+        <li><a href="#">Web Design</a></li>
+        <li><a href="#">Development</a></li>
+        <li><a href="#">Advertising Creatives</a></li>
+        <li><a href="#">Branding &amp; Identity</a></li>
+      </ul>
+
+      <p class="nav-header" style="left: 935px">Contact</p>
+      <ul class="contact-links">
+        <li><a href="mailto:hello@fisherlabs.com">hello@fisherlabs.com</a></li>
+        <li><a href="tel:+17472878064">+1 (747) 287 80 64</a></li>
+        <li>Los Angeles, CA</li>
+      </ul>
+
+      <p class="nav-header" style="left:1166px">Let's Talk</p>
+      <a class="lets-talk-arrow" href="https://www.instagram.com/alexx.fisher/" target="_blank" rel="noopener">
+        <img src="https://www.figma.com/api/mcp/asset/ed24f0f9-4caf-407e-a4d1-447f809c1bf4" alt="Let's Talk" style="width:100%;height:100%;">
+      </a>
+
+      <p class="footer-copy">© 2018 Fisher Labs. All rights reserved.</p>
+      <a class="footer-legal" style="left:1062px" href="#">Privacy Policy</a>
+      <a class="footer-legal" style="left:1230px" href="#">Terms of Service</a>
+
+    </footer>
+  </div>
+
+
+<!-- ══════════════════════════════════════
+     MOBILE SITE
+══════════════════════════════════════ -->
+<div id="mobile-site">
+
+  <!-- Mobile nav overlay -->
+  <div class="m-nav-overlay" id="mNavOverlay">
+
+    <!-- Blurred bg texture -->
+    <img class="m-nav-bg" src="https://www.figma.com/api/mcp/asset/9469b975-c34c-4829-93ae-784ce955c86f" alt="">
+
+    <!-- Close button -->
+    <img class="m-nav-close-btn" id="mNavClose"
+         src="https://www.figma.com/api/mcp/asset/7e3da885-a18e-40d0-b077-8717aa64b04d" alt="Close">
+
+    <!-- Nav links -->
+    <nav class="m-nav-links-wrap">
+      <a href="#mw-services">Services</a>
+      <a href="#mw-projects">Work</a>
+      <a href="#mw-approach-mob">Process</a>
+      <a href="#mw-cta">Start Project</a>
+      <a href="#mw-footer-mob">Contact</a>
     </nav>
 
-    <!-- Left headline -->
-    <div class="hero-left">
-        <h2 class="hero-headline">SOURCE<br>OF BOLD<br>IDEAS/</h2>
-        <p class="hero-subtext">We design digital experiences,<br>brands and creative solutions<br>that drive results.</p>
+    <!-- Language switcher -->
+    <div class="m-nav-lang">
+      <button class="m-nav-lang-btn active">ENG</button>
+      <button class="m-nav-lang-btn">RU</button>
     </div>
 
-    <!-- Right large title -->
-    <div class="hero-right">
-        <span class="hero-title">CREATIVE<br>WEB DESIGN<br>STUDIO</span>
-        <div class="hero-right-bottom">
-            <p class="hero-right-sub">We create modern websites,<br>brand identities and digital<br>solutions that help businesses<br>stand out.</p>
-            <div class="btn-circle btn-circle--lg">
-                <svg class="ic-arrow" viewBox="0 0 15 15" fill="none">
-                    <path d="M2.5 12.5L12.5 2.5M12.5 2.5H4.5M12.5 2.5V10.5"
-                          stroke="white" stroke-width="1.5"
-                          stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
+    <!-- Logo mark -->
+    <img class="m-nav-logo-mark"
+         src="https://www.figma.com/api/mcp/asset/c83e5523-9d1c-44d4-be9e-6889e15b5739" alt="Fisher Labs">
+
+  </div>
+
+  <!-- ── MOBILE HERO ── -->
+  <!-- ── MOBILE HERO: sticky video scrub ── -->
+  <div id="m-scrub-zone">
+    <div id="mw-hero-vid">
+
+      <!-- Full-viewport canvas -->
+      <canvas id="mHeroCanvas"></canvas>
+      <div class="m-hero-vid-grad"></div>
+
+      <!-- Scaled 390px UI overlay -->
+      <div class="m-hero-vid-ui" id="mHeroUi">
+
+        <div class="m-logo">
+          <img class="m-logo-mark" src="https://www.figma.com/api/mcp/asset/78877a45-cb3f-46fe-99c5-e04f184d013b" alt="Fisher Labs">
+          <img class="m-logo-text"  src="https://www.figma.com/api/mcp/asset/4eabe2a3-3ab8-4058-8fb2-b04a21aa17fa" alt="Fisher Labs">
         </div>
+
+        <img class="m-hamburger" id="mHamburger"
+             src="https://www.figma.com/api/mcp/asset/303e1abd-0f69-4482-8c35-c87c5865779a" alt="Menu">
+
+        <div class="m-headline">
+          <span class="m-hl-line">Sourse</span>
+          <span class="m-hl-line">of bold</span>
+          <span class="m-hl-line">ideas/</span>
+        </div>
+
+        <p class="m-hero-desc">We design digital experiences, brands and creative solutions that drive results</p>
+
+      </div>
     </div>
+  </div>
 
-    <!-- Bottom cards -->
-    <div class="hero-cards">
-        <div class="card-stat">
-            <div class="card-stat-top">
-                <span class="card-asterisk">✳</span>
-                <span class="card-stat-label">Projects completed</span>
-            </div>
-            <div class="card-stat-num">85%</div>
-            <div class="card-stat-desc">Client satisfaction rate</div>
-        </div>
+  <!-- ── MOBILE HERO: cards (after video) ── -->
+  <div class="m-wrapper" id="mw-hero-cards">
+    <div class="m-hero-cards">
 
-        <div class="card-cta">
-            <span class="card-cta-text">Let's build<br>something<br>great</span>
-            <div class="btn-circle btn-circle--card">
-                <svg class="ic-arrow" viewBox="0 0 15 15" fill="none">
-                    <path d="M2.5 12.5L12.5 2.5M12.5 2.5H4.5M12.5 2.5V10.5"
-                          stroke="white" stroke-width="1.5"
-                          stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-        </div>
+      <div class="m-stats-card">
+        <img class="m-stats-asterisk" src="https://www.figma.com/api/mcp/asset/63e265bf-8f8e-4e1b-9bc8-990a9e140ed2" alt="">
+        <div class="m-stats-label">Projects<br>completed</div>
+        <div class="m-stats-num">95%</div>
+        <div class="m-stats-sub">Client satisfaction rate</div>
+      </div>
+
+      <a class="m-cta-card" href="#mw-services">
+        <img class="m-cta-bg" src="https://www.figma.com/api/mcp/asset/84eb4536-2e9f-44ef-8a4c-2676f038eeeb" alt="">
+        <p class="m-cta-text">Let's build something great</p>
+        <img class="m-cta-arrow" src="https://www.figma.com/api/mcp/asset/b03594ac-9dd4-4292-a3d4-c02026ac217a" alt="">
+      </a>
+
+      <div class="m-btm-headline">
+        <span class="m-bhl-line">creative</span>
+        <span class="m-bhl-line">web design</span>
+        <span class="m-bhl-line">studio</span>
+      </div>
+
+      <p class="m-btm-desc">We create modern websites, brand identities and digital solutions that help businesses stand out</p>
+
+      <a class="m-btm-arrow-link" href="#mw-services">
+        <img class="m-btm-arrow" src="https://www.figma.com/api/mcp/asset/b03594ac-9dd4-4292-a3d4-c02026ac217a" alt="">
+      </a>
+
     </div>
+  </div>
 
-</section>
+  <!-- ── MOBILE SERVICES ── -->
+  <div class="m-wrapper" id="mw-services">
+    <div class="m-services">
+
+      <img class="m-svc-asterisk" src="https://www.figma.com/api/mcp/asset/0130b109-3484-4acf-9caa-dfdf43863def" alt="">
+      <p class="m-svc-label">What we do</p>
+      <div class="m-svc-title">
+        <span class="m-svc-title-line">Services that</span>
+        <span class="m-svc-title-line">drive results</span>
+      </div>
+      <p class="m-svc-intro">We combine creativity, strategy and technology to deliver digital solutions that help your brand grow and stand out</p>
+
+      <!-- Card 1 — Web Design -->
+      <div class="m-svc-card" style="top:326px">
+        <span class="m-svc-num">01</span>
+        <div class="m-svc-name">Web design<br>&amp; development</div>
+        <p class="m-svc-text">Modern, responsive and conversion-focused websites that deliver results</p>
+        <a class="m-svc-btn" href="#">
+          <span>Write for details</span>
+          <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="#0c0c0c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <div class="m-svc-img-wrap">
+          <img src="case-karyna.webp" alt="">
+        </div>
+      </div>
+
+      <!-- Card 2 — Advertising -->
+      <div class="m-svc-card" style="top:832px">
+        <span class="m-svc-num">02</span>
+        <div class="m-svc-name">Advertising creatives</div>
+        <p class="m-svc-text">Scroll-stopping ads and visual content that capture attention and drive action</p>
+        <a class="m-svc-btn" href="#">
+          <span>Write for details</span>
+          <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="#0c0c0c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <div class="m-svc-img-wrap">
+          <img src="adversting.webp" alt="">
+        </div>
+      </div>
+
+      <!-- Card 3 — Branding -->
+      <div class="m-svc-card" style="top:1338px">
+        <span class="m-svc-num">03</span>
+        <div class="m-svc-name">Branding<br>&amp; identity</div>
+        <p class="m-svc-text">Strong brands start with strategy. We build identities that leave a lasting impact</p>
+        <a class="m-svc-btn" href="#">
+          <span>Write for details</span>
+          <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="#0c0c0c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <div class="m-svc-img-wrap">
+          <img src="presentation-ruotes.webp" alt="">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── MOBILE PROJECTS ── -->
+  <div class="m-wrapper" id="mw-projects">
+    <div class="m-projects">
+
+      <img class="m-proj-asterisk" src="https://www.figma.com/api/mcp/asset/1bf9368d-5f2f-4d40-9bb8-45c2b8d0edf4" alt="">
+      <p class="m-proj-label">Our work</p>
+      <p class="m-proj-title">Selected<br>Projects</p>
+
+      <span class="m-proj-tab active" style="left:14px; width:98px" data-center="63">Websites</span>
+      <span class="m-proj-tab"        style="left:138px; width:98px" data-center="187">Branding</span>
+      <span class="m-proj-tab"        style="left:265px; width:112px" data-center="321">Adversting</span>
+      <div class="m-proj-tab-underline" id="mProjUnderline"></div>
+
+      <!-- WEBSITES content -->
+      <div id="mProjWebsites">
+      <div class="m-proj-list">
+
+        <!-- Card 1 — Mentorship Program -->
+        <a class="m-proj-item" href="https://www.figma.com/proto/H9UWCrgans6Xhb1LFbe6Bg/Taras-Hrytskiv-web-design--desctop---mob-?node-id=40-795&viewport=514%2C208%2C0.11&t=No3vuBCYuV1TNSgo-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+          <div class="m-proj-thumb"><img src="frame-727.webp" alt="Mentorship Program"></div>
+          <div class="m-proj-info">
+            <span class="m-proj-name">Mentorship Program</span>
+            <span class="m-proj-view"><span class="m-proj-view-text">View Site</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+          </div>
+        </a>
+
+        <!-- Card 2 — Online Course -->
+        <a class="m-proj-item" href="https://www.figma.com/proto/USwYK5ysW510RFGHQsBTqP/%D0%AF%D0%BD-%D0%92%D0%BE%D1%81%D0%BA%D1%80%D0%B5%D1%81%D0%B5%D0%BD%D1%81%D1%8C%D0%BA%D0%B8%D0%B9?node-id=339-39&viewport=355%2C495%2C0.05&t=qY2q5bvnOpBtZxrb-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+          <div class="m-proj-thumb"><img src="frame-725.webp" alt="Online Course"></div>
+          <div class="m-proj-info">
+            <span class="m-proj-name">Online Course</span>
+            <span class="m-proj-view"><span class="m-proj-view-text">View Site</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+          </div>
+        </a>
+
+        <!-- Card 3 — Fitness Workshop -->
+        <a class="m-proj-item" href="https://www.figma.com/proto/7JFUHyDcXVFGw5xz9bulQp/Zubalenok?node-id=0-3&viewport=371%2C323%2C0.1&t=35O3zmmFBotdAbB9-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+          <div class="m-proj-thumb"><img src="frame-726.webp" alt="Fitness Workshop"></div>
+          <div class="m-proj-info">
+            <span class="m-proj-name">Fitness Workshop</span>
+            <span class="m-proj-view"><span class="m-proj-view-text">View Site</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+          </div>
+        </a>
+
+        <!-- Card 4 — Infoproduct Launch -->
+        <a class="m-proj-item" href="https://www.figma.com/proto/4fRfB8jkVsEemBeXMIWiYv/%D0%A4%D0%BE%D1%80%D0%BC%D0%B0%D0%BB%D0%B0-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%BE%D0%B2-%D0%98%D0%BD%D1%84%D0%BE%D0%BF%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%82%D0%BE%D0%B2--%D1%81%D0%B0%D0%B9%D1%82-?node-id=1-2&viewport=496%2C139%2C0.03&t=lmuHgfXHgDD3hCaY-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+          <div class="m-proj-thumb"><img src="frame-729.webp" alt="Infoproduct Launch"></div>
+          <div class="m-proj-info">
+            <span class="m-proj-name">Infoproduct Launch</span>
+            <span class="m-proj-view"><span class="m-proj-view-text">View Site</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+          </div>
+        </a>
+
+        <!-- Cards 5–11 (hidden until "More" is clicked) -->
+        <div class="m-proj-extra" id="mProjExtra">
+
+          <!-- Card 5 — Course Bundle -->
+          <a class="m-proj-item" href="https://www.figma.com/proto/DUyF9PxxiXnmAzSanhLIKz/Zubalenok-%D1%81%D0%B0%D0%B9%D1%82--%D0%94%D0%B5%D1%81%D0%BA%D1%82%D0%BE%D0%BF---%D0%BC%D0%BE%D0%B1-?node-id=1984-2&viewport=-32%2C2705%2C0.35&t=BpLwvyxtMKh979Yj-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+            <div class="m-proj-thumb"><img src="frame-728.webp" alt="Course Bundle"></div>
+            <div class="m-proj-info">
+              <span class="m-proj-name">Course Bundle</span>
+              <span class="m-proj-view"><span class="m-proj-view-text">View Site</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+            </div>
+          </a>
+
+          <!-- Card 6 — Creator Platform -->
+          <a class="m-proj-item" href="https://www.figma.com/proto/L77w0CBjy3b2kYrheCsbz3/ZBL-Agency?node-id=161-2&viewport=-1021%2C311%2C0.31&t=nLIu9lvI9iDp6NeK-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+            <div class="m-proj-thumb"><img src="frame-730.webp" alt="Creator Platform"></div>
+            <div class="m-proj-info">
+              <span class="m-proj-name">Creator Platform</span>
+              <span class="m-proj-view"><span class="m-proj-view-text">View Site</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+            </div>
+          </a>
+
+          <!-- Card 7 — Online Course -->
+          <a class="m-proj-item" href="https://www.figma.com/proto/FQLPNicHU4fPS30EapWQyX/%D1%81%D0%B0%D0%B9%D1%82-OLIVIA-RIKLAN?node-id=22-70&viewport=-1619%2C1482%2C0.14&t=hiaW7ijjnIHSaUE4-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+            <div class="m-proj-thumb"><img src="frame-734.webp" alt="Online Course"></div>
+            <div class="m-proj-info">
+              <span class="m-proj-name">Online Course</span>
+              <span class="m-proj-view"><span class="m-proj-view-text">View Site</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+            </div>
+          </a>
+
+          <!-- Card 8 — Course Bundle -->
+          <a class="m-proj-item" href="https://www.figma.com/proto/CUOCa0dXO6m3rVxoWIgrMC/%D0%A1%D0%B0%D0%B9%D1%82-Zubalenok?node-id=0-3&viewport=563%2C420%2C0.18&t=mpnf4K0kp1Pgd97d-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+            <div class="m-proj-thumb"><img src="frame-732.webp" alt="Course Bundle"></div>
+            <div class="m-proj-info">
+              <span class="m-proj-name">Course Bundle</span>
+              <span class="m-proj-view"><span class="m-proj-view-text">View Site</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+            </div>
+          </a>
+
+          <!-- Card 9 — CashInOut -->
+          <a class="m-proj-item" href="https://www.figma.com/proto/80xjLDgE9htYQ7PLuG3EJ4/cashinout---%D0%92%D0%B0%D0%B4%D0%B8%D0%BC?node-id=2-3&viewport=504%2C1978%2C0.14&t=p1RtrEfFvBYHZQOw-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+            <div class="m-proj-thumb"><img src="frame-735.webp" alt="CashInOut"></div>
+            <div class="m-proj-info">
+              <span class="m-proj-name">CashInOut</span>
+              <span class="m-proj-view"><span class="m-proj-view-text">View Site</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+            </div>
+          </a>
+
+          <!-- Card 10 — Interior Design -->
+          <a class="m-proj-item" href="https://www.figma.com/proto/Ioi07rIsbXkEv590I4H0tV/Web-site-Carolina-Bath-LLC?node-id=124-733&viewport=-878%2C210%2C0.16&t=Xd2EjLXAKUBE5Kau-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+            <div class="m-proj-thumb"><img src="frame-731.webp" alt="Interior Design"></div>
+            <div class="m-proj-info">
+              <span class="m-proj-name">Interior Design</span>
+              <span class="m-proj-view"><span class="m-proj-view-text">View Site</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+            </div>
+          </a>
+
+          <!-- Card 11 — Online Coach -->
+          <a class="m-proj-item" href="https://www.figma.com/proto/MQpuxS25a6N4HeXfgMjEhI/%D0%98%D1%80%D0%B8%D0%BD%D0%B0-%D0%9F%D0%BE%D0%B3%D0%BE%D0%B4%D0%B8%D0%BD%D0%B0--%D1%81%D0%B0%D0%B9%D1%82-?node-id=0-3&viewport=481%2C2452%2C0.33&t=m5PovECsXIzJmC4r-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+            <div class="m-proj-thumb"><img src="frame-742.webp" alt="Online Coach"></div>
+            <div class="m-proj-info">
+              <span class="m-proj-name">Online Coach</span>
+              <span class="m-proj-view"><span class="m-proj-view-text">View Site</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+            </div>
+          </a>
+
+          <!-- Card 12 — Online Course -->
+          <a class="m-proj-item" href="https://www.figma.com/proto/Dwt1JJ6mIyoXxoL9mDFd1G/%D0%9A%D0%B0%D1%80%D0%B8%D0%BD%D0%B0-%D0%A8%D0%B0%D0%BF%D0%BE%D0%B2%D0%B0%D0%BB%D1%8E%D0%BA-%D1%81%D0%B0%D0%B9%D1%82?node-id=1404-44&viewport=-3285%2C3664%2C0.56&t=uR5XI8e601kD5cnf-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+            <div class="m-proj-thumb"><img src="frame-744.webp" alt="Online Course"></div>
+            <div class="m-proj-info">
+              <span class="m-proj-name">Online Course</span>
+              <span class="m-proj-view"><span class="m-proj-view-text">View Site</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+            </div>
+          </a>
+
+          <!-- Card 13 — Real Estate -->
+          <a class="m-proj-item" href="https://www.figma.com/proto/kSTGzFzAG1GBb5TPBkhKhg/Kohan-Group-REAL-ESTATE---web-design--%D1%81%D0%B0%D0%B9%D1%82-?node-id=62-2&viewport=-1364%2C3911%2C0.44&t=9wENoieyI9U3uEdP-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=1%3A2&page-id=0%3A1" target="_blank" rel="noopener">
+            <div class="m-proj-thumb"><img src="frame-733.webp" alt="Real Estate"></div>
+            <div class="m-proj-info">
+              <span class="m-proj-name">Real Estate</span>
+              <span class="m-proj-view"><span class="m-proj-view-text">View Site</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+            </div>
+          </a>
+
+        </div><!-- /m-proj-extra -->
+
+        <!-- More / Less button -->
+        <button class="m-proj-more-btn" id="mProjMoreBtn">
+          <span id="mProjMoreBtnText">More Projects</span>
+          <img class="m-proj-btn-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt="">
+        </button>
+
+      </div><!-- /m-proj-list -->
+      </div><!-- /mProjWebsites -->
+
+      <!-- BRANDING content -->
+      <div id="mProjBranding" style="display:none">
+      <div class="m-proj-list">
+
+        <!-- Карточки 1–4 всегда видны -->
+        <a class="m-proj-item" href="https://www.figma.com/proto/E4gKBOX9MJAzFS1H7zrFBe/Ruotes-Logo?node-id=30-2&viewport=-2190%2C97%2C0.1&t=v4vl21iYXFjjEjJz-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+          <div class="m-proj-thumb"><img src="frame-724.webp" alt="Ruotes.com"></div>
+          <div class="m-proj-info">
+            <span class="m-proj-name">Ruotes.com</span>
+            <span class="m-proj-view"><span class="m-proj-view-text">View Work</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+          </div>
+        </a>
+
+        <a class="m-proj-item" href="https://www.figma.com/proto/7suNwxn0o67D1hMOk5xhbk/Logo-Yuliana-Grunkovskaya?node-id=12-2&viewport=-173%2C149%2C0.17&t=6rLnfLLJgrfmOC7x-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+          <div class="m-proj-thumb"><img src="frame-737.webp" alt="Brand Identity"></div>
+          <div class="m-proj-info">
+            <span class="m-proj-name">Brand Identity</span>
+            <span class="m-proj-view"><span class="m-proj-view-text">View Work</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+          </div>
+        </a>
+
+        <a class="m-proj-item" href="https://www.figma.com/proto/eT0SQxG0Hzg0efXKkvW3ml/Logo-presentation-EBASH?node-id=1-228&viewport=653%2C242%2C0.15&t=jZ5buSSr8yofrpSG-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+          <div class="m-proj-thumb"><img src="frame-738.webp" alt="E.B.A.S.H."></div>
+          <div class="m-proj-info">
+            <span class="m-proj-name">E.B.A.S.H.</span>
+            <span class="m-proj-view"><span class="m-proj-view-text">View Work</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+          </div>
+        </a>
+
+        <a class="m-proj-item" href="https://www.figma.com/proto/61hmKd14fQ3iUY9K6ako2S/CarGro-Logo--%D1%87%D0%B5%D1%80%D0%BD%D0%BE%D0%B2%D0%B8%D0%BA-?node-id=2001-19&viewport=-370%2C101%2C0.17&t=QVW19d4EMcXv5m04-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+          <div class="m-proj-thumb"><img src="frame-740.webp" alt="Cargro"></div>
+          <div class="m-proj-info">
+            <span class="m-proj-name">Cargro</span>
+            <span class="m-proj-view"><span class="m-proj-view-text">View Work</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+          </div>
+        </a>
+
+        <!-- Карточки 5–8 скрыты -->
+        <div class="m-proj-extra" id="mBrandExtra">
+
+          <a class="m-proj-item" href="https://www.figma.com/proto/7SGZwvDUQHJFAs4oQ9nsLM/Horizon-estate?node-id=0-3&viewport=398%2C93%2C0.14&t=oar6QT0ILxcU1VdN-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+            <div class="m-proj-thumb"><img src="frame-739.webp" alt="Horizon Estate"></div>
+            <div class="m-proj-info">
+              <span class="m-proj-name">Horizon Estate</span>
+              <span class="m-proj-view"><span class="m-proj-view-text">View Work</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+            </div>
+          </a>
+
+          <a class="m-proj-item" href="https://www.figma.com/proto/67Sl8M4eVrcP9rqAJOe3OF/Carolina-Bath-LLS--%D0%BD%D0%B0%D0%B1%D1%80%D0%BE%D1%81%D0%BA%D0%B8-?node-id=32-110&viewport=-1045%2C-458%2C0.15&t=iI7JP84LmY02z8hK-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+            <div class="m-proj-thumb"><img src="frame-741.webp" alt="Carolina Bath"></div>
+            <div class="m-proj-info">
+              <span class="m-proj-name">Carolina Bath</span>
+              <span class="m-proj-view"><span class="m-proj-view-text">View Work</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+            </div>
+          </a>
+
+          <a class="m-proj-item" href="https://www.figma.com/proto/E4gKBOX9MJAzFS1H7zrFBe/Ruotes-Logo?node-id=71-481&viewport=-1198%2C-475%2C0.1&t=yllu7AodL3vPriCS-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+            <div class="m-proj-thumb"><img src="frame-736.webp" alt="SMM Design"></div>
+            <div class="m-proj-info">
+              <span class="m-proj-name">SMM Design</span>
+              <span class="m-proj-view"><span class="m-proj-view-text">View Work</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+            </div>
+          </a>
+
+          <a class="m-proj-item" href="https://www.figma.com/proto/zl4o4t41EGWpWv5Twqqcng/%D0%A3%D0%BF%D0%B0%D0%BA%D0%BE%D0%B2%D0%BA%D0%B0-UKR-GEO-SUPERVISION?node-id=1-2&viewport=428%2C412%2C0.24&t=ioR9LUo1IxEb6bVN-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+            <div class="m-proj-thumb"><img src="frame-743.webp" alt="Supervision"></div>
+            <div class="m-proj-info">
+              <span class="m-proj-name">Supervision</span>
+              <span class="m-proj-view"><span class="m-proj-view-text">View Work</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+            </div>
+          </a>
+
+        </div><!-- /mBrandExtra -->
+
+        <!-- More / Less кнопка для Branding -->
+        <button class="m-proj-more-btn" id="mBrandMoreBtn">
+          <span id="mBrandMoreBtnText">More Projects</span>
+          <img class="m-proj-btn-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt="">
+        </button>
+
+      </div><!-- /m-proj-list branding -->
+      </div><!-- /mProjBranding -->
+
+      <div id="mProjAdvertsting" style="display:none">
+      <div class="m-proj-list">
+
+        <a class="m-proj-item" href="https://www.figma.com/proto/LEPyAkcAaj1rxzgjx3hSNS/Fisher-Labs-web-site?node-id=94-587&viewport=2149%2C-1193%2C0.15&t=hflvRjmGhPzpKJrn-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+          <div class="m-proj-thumb"><img src="frame-745.webp" alt="Ad Creative"></div>
+          <div class="m-proj-info">
+            <span class="m-proj-name">Digital Education</span>
+            <span class="m-proj-view"><span class="m-proj-view-text">View Work</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+          </div>
+        </a>
+
+        <a class="m-proj-item" href="https://www.figma.com/proto/LEPyAkcAaj1rxzgjx3hSNS/Fisher-Labs-web-site?node-id=94-730&viewport=2149%2C-1193%2C0.15&t=VmknKNmJlmXbnPQA-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+          <div class="m-proj-thumb"><img src="frame-749.webp" alt="Social Campaign"></div>
+          <div class="m-proj-info">
+            <span class="m-proj-name">Cryptocurrency</span>
+            <span class="m-proj-view"><span class="m-proj-view-text">View Work</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+          </div>
+        </a>
+
+        <a class="m-proj-item" href="https://www.figma.com/proto/LEPyAkcAaj1rxzgjx3hSNS/Fisher-Labs-web-site?node-id=94-1004&viewport=2149%2C-1193%2C0.15&t=jLkuc2XBNFrIoYFZ-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+          <div class="m-proj-thumb"><img src="frame-763.webp" alt="Brand Campaign"></div>
+          <div class="m-proj-info">
+            <span class="m-proj-name">Products & Services</span>
+            <span class="m-proj-view"><span class="m-proj-view-text">View Work</span><img class="m-proj-view-arrow" src="https://www.figma.com/api/mcp/asset/783cd38e-690f-4692-b0d0-102329f4d1e0" alt=""></span>
+          </div>
+        </a>
+
+      </div><!-- /m-proj-list adversting -->
+      </div><!-- /mProjAdvertsting -->
+
+    </div>
+  </div>
+
+  <!-- ── MOBILE APPROACH ── -->
+  <div class="m-wrapper" id="mw-approach-mob">
+    <div class="m-approach">
+
+      <img class="m-appr-asterisk" src="https://www.figma.com/api/mcp/asset/ef3cf0ea-7dc3-489c-88e6-87e09268b389" alt="">
+      <p class="m-appr-label">Our approach</p>
+      <p class="m-appr-title">From idea<br>to impact</p>
+      <p class="m-appr-intro">We follow a clear process to deliver high-quality digital solutions</p>
+
+      <!-- Vertical line (grows via JS) -->
+      <div class="m-appr-vline" id="mApprLine"></div>
+
+      <!-- Dots (CSS circles — start dim, light red via JS) -->
+      <div class="m-appr-dot" style="top:295px"></div>
+      <div class="m-appr-dot" style="top:415px"></div>
+      <div class="m-appr-dot" style="top:535px"></div>
+      <div class="m-appr-dot" style="top:655px"></div>
+      <div class="m-appr-dot" style="top:775px"></div>
+      <div class="m-appr-dot-sm" style="top:840px"></div>
+
+      <!-- Step 01 — Discover -->
+      <div class="m-appr-step-group" style="top:282px">
+        <p class="m-appr-num" style="top:0">01</p>
+        <p class="m-appr-name" style="top:8px">Discover</p>
+        <p class="m-appr-step-desc" style="top:48px">We learn about your business, goals and audience</p>
+      </div>
+
+      <!-- Step 02 — Strategy -->
+      <div class="m-appr-step-group" style="top:400px">
+        <p class="m-appr-num" style="top:0">02</p>
+        <p class="m-appr-name" style="top:10px">Strategy</p>
+        <p class="m-appr-step-desc" style="top:50px">We define the right strategy and creative direction</p>
+      </div>
+
+      <!-- Step 03 — Design -->
+      <div class="m-appr-step-group" style="top:522px">
+        <p class="m-appr-num" style="top:0">03</p>
+        <p class="m-appr-name" style="top:8px">Design</p>
+        <p class="m-appr-step-desc" style="top:48px">We create modern, functional and engaging designs</p>
+      </div>
+
+      <!-- Step 04 — Develop -->
+      <div class="m-appr-step-group" style="top:640px">
+        <p class="m-appr-num" style="top:0">04</p>
+        <p class="m-appr-name" style="top:10px">Develop</p>
+        <p class="m-appr-step-desc" style="top:50px">We build fast, responsive and high-performing solutions</p>
+      </div>
+
+      <!-- Step 05 — Deliver -->
+      <div class="m-appr-step-group" style="top:760px">
+        <p class="m-appr-num" style="top:0">05</p>
+        <p class="m-appr-name" style="top:10px">Deliver</p>
+        <p class="m-appr-step-desc" style="top:50px">We test, launch and support your project for success</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── MOBILE CTA ── -->
+  <div class="m-wrapper" id="mw-cta">
+    <div class="m-cta-section">
+
+      <img class="m-cta-star" src="https://www.figma.com/api/mcp/asset/dc0a7fce-8cfb-4a98-962e-5d546d187d05" alt="">
+
+      <p class="m-cta-headline">LET'S CREATE SOMETHING GREAT TOGETHER</p>
+
+      <p class="m-cta-sub">Have a project in mind? Let's talk about how we can help your brand grow and succeed</p>
+
+      <a class="m-cta-btn" href="https://www.instagram.com/alexx.fisher/" target="_blank" rel="noopener">
+        <span class="m-cta-btn-text">START A PROJECT</span>
+        <div class="m-cta-btn-arrow">
+          <svg width="14" height="14" viewBox="0 0 10 10" fill="none">
+            <path d="M2 8L8 2M8 2H3M8 2V7" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ── MOBILE FOOTER ── -->
+  <div class="m-wrapper" id="mw-footer-mob">
+    <div class="m-footer">
+
+      <!-- Logo -->
+      <img class="m-ftr-logo-icon" src="https://www.figma.com/api/mcp/asset/23946dad-2b18-49f6-9c55-d016932a236b" alt="">
+      <img class="m-ftr-logo-text" src="https://www.figma.com/api/mcp/asset/157c579b-9d13-492c-8192-0ca74f559546" alt="Fisher Labs">
+
+      <!-- About -->
+      <p class="m-ftr-about">We are a creative web design studio helping brands grow through digital design, development and strategy.</p>
+
+      <!-- Social links -->
+      <a class="m-ftr-social" style="left:20px" href="https://www.instagram.com/alexx.fisher/" target="_blank" rel="noopener">Instagram</a>
+      <a class="m-ftr-social" style="left:147px" href="#">Behance</a>
+      <a class="m-ftr-social" style="left:262px" href="#">Dribble</a>
+
+      <!-- Divider 1 -->
+      <div class="m-ftr-divider" style="top:269px"></div>
+
+      <!-- Navigation -->
+      <p class="m-ftr-heading" style="left:20px; top:313px">Navigation</p>
+      <p class="m-ftr-heading" style="left:195px; top:318px">Services</p>
+
+      <div class="m-ftr-nav-col" style="left:20px; top:355px">
+        <a class="m-ftr-nav-link" href="#">Home</a>
+        <a class="m-ftr-nav-link" href="#">Work</a>
+        <a class="m-ftr-nav-link" href="#">Services</a>
+        <a class="m-ftr-nav-link" href="#">Process</a>
+        <a class="m-ftr-nav-link" href="#">Contact</a>
+      </div>
+
+      <div class="m-ftr-nav-col" style="left:195px; top:360px">
+        <a class="m-ftr-nav-link" href="#">Web Design</a>
+        <a class="m-ftr-nav-link" href="#">Development</a>
+        <a class="m-ftr-nav-link" href="#">Advertising Creatives</a>
+        <a class="m-ftr-nav-link" href="#">Branding &amp; Identity</a>
+      </div>
+
+      <!-- Divider 2 -->
+      <div class="m-ftr-divider" style="top:535px"></div>
+
+      <!-- Contact & Let's Talk -->
+      <p class="m-ftr-heading" style="left:20px; top:575px">Contact</p>
+      <p class="m-ftr-heading" style="left:195px; top:575px">Let's Talk</p>
+
+      <div class="m-ftr-contact-info">
+        <p style="margin:0; line-height:30px">hello@fisherlabs.com</p>
+        <p style="margin:0; line-height:30px">+1 (747) 287 80 64</p>
+        <p style="margin:0; line-height:30px">Los Angeles, CA</p>
+      </div>
+
+      <a class="m-ftr-talk-arrow" href="https://www.instagram.com/alexx.fisher/" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 10 10" fill="none">
+          <path d="M2 8L8 2M8 2H3M8 2V7" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+
+      <!-- Divider 3 -->
+      <div class="m-ftr-divider" style="top:747px"></div>
+
+      <!-- Bottom row -->
+      <p class="m-ftr-copy">© 2018 Fisher Labs. All rights reserved.</p>
+      <a class="m-ftr-bottom-link" style="left:20px" href="#">Privacy Policy</a>
+      <a class="m-ftr-bottom-link" style="left:188px" href="#">Terms of Service</a>
+
+    </div>
+  </div>
+
+</div>
+
+
+<script>
+  /* ── Scale all sections on resize ── */
+  function scaleAll() {
+    const s = window.innerWidth / 1440;
+
+    document.querySelector('.hero').style.transform        = 'scale(' + s + ')';
+    document.getElementById('w-hero').style.height        = window.innerHeight + 'px';
+
+    document.querySelector('.services').style.transform   = 'scale(' + s + ')';
+    document.getElementById('w-services').style.height   = (530 * s) + 'px';
+
+    document.querySelector('.projects').style.transform   = 'scale(' + s + ')';
+    document.getElementById('w-projects').style.height   = (490 * s) + 'px';
+
+    document.querySelector('.approach').style.transform   = 'scale(' + s + ')';
+    document.getElementById('w-approach').style.height   = (245 * s) + 'px';
+
+    document.querySelector('.cta').style.transform        = 'scale(' + s + ')';
+    document.getElementById('w-cta').style.height        = (190 * s) + 'px';
+
+    document.querySelector('.footer').style.transform     = 'scale(' + s + ')';
+    document.getElementById('w-footer').style.height     = (330 * s) + 'px';
+
+    /* Mobile sections */
+    const ms     = window.innerWidth / 390;
+
+    /* Mobile hero: sticky video UI overlay */
+    const mHeroUi  = document.getElementById('mHeroUi');
+    const mwHeroVid = document.getElementById('mw-hero-vid');
+    if (mHeroUi && mwHeroVid) {
+      const uiH = window.innerHeight / ms;
+      mHeroUi.style.transform = 'scale(' + ms + ')';
+      mHeroUi.style.height    = uiH + 'px';
+      mwHeroVid.style.height  = window.innerHeight + 'px';
+    }
+
+    /* Mobile hero: cards section */
+    const mCards  = document.querySelector('.m-hero-cards');
+    const mwCards = document.getElementById('mw-hero-cards');
+    if (mCards && mwCards) {
+      mCards.style.transform = 'scale(' + ms + ')';
+      mwCards.style.height   = (705 * ms) + 'px';
+    }
+
+    const mAppr  = document.querySelector('.m-approach');
+    const mwAppr = document.getElementById('mw-approach-mob');
+    if (mAppr && mwAppr) {
+      mAppr.style.transform = 'scale(' + ms + ')';
+      mwAppr.style.height   = (905 * ms) + 'px';
+    }
+
+    const mProj  = document.querySelector('.m-projects');
+    const mwProj = document.getElementById('mw-projects');
+    if (mProj && mwProj) {
+      mProj.style.transform = 'scale(' + ms + ')';
+      mwProj.style.height   = mProj.offsetHeight * ms + 'px';
+    }
+
+    const mSvc  = document.querySelector('.m-services');
+    const mwSvc = document.getElementById('mw-services');
+    if (mSvc && mwSvc) {
+      mSvc.style.transform = 'scale(' + ms + ')';
+      mwSvc.style.height   = (1856 * ms) + 'px';
+    }
+
+    const mCta  = document.querySelector('.m-cta-section');
+    const mwCta = document.getElementById('mw-cta');
+    if (mCta && mwCta) {
+      mCta.style.transform = 'scale(' + ms + ')';
+      mwCta.style.height   = (446 * ms) + 'px';
+    }
+
+    const mFtr  = document.querySelector('.m-footer');
+    const mwFtr = document.getElementById('mw-footer-mob');
+    if (mFtr && mwFtr) {
+      mFtr.style.transform = 'scale(' + ms + ')';
+      mwFtr.style.height   = (879 * ms) + 'px';
+    }
+  }
+  window.addEventListener('resize', scaleAll);
+  scaleAll();
+
+  /* ── Hero canvas scroll scrub (image sequence) ── */
+  (function() {
+    const canvas = document.getElementById('heroCanvas');
+    const zone   = document.getElementById('hero-scrub-zone');
+    if (!canvas || !zone) return;
+
+    const ctx        = canvas.getContext('2d');
+    const TOTAL      = 121;
+    const FRAME_PATH = 'frames/frame_';
+    const frames     = [];
+    let   loaded     = 0;
+    let   currentIdx = 0;
+
+    /* Resize canvas to fill wrapper */
+    function resizeCanvas() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drawFrame(frames[currentIdx]);
+    }
+
+    /* Draw frame with object-fit:cover + optional X offset */
+    function drawFrame(img) {
+      if (!img || !img.complete) return;
+      const cw = canvas.width, ch = canvas.height;
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+      const scale = Math.max(cw / iw, ch / ih);
+      const sw = iw * scale, sh = ih * scale;
+      const sx = (cw - sw) / 2;   /* ← adjust this to pan left/right */
+      const sy = (ch - sh) / 2;
+      ctx.drawImage(img, sx, sy, sw, sh);
+    }
+
+    /* Scroll → pick frame index */
+    function scrub() {
+      const rect      = zone.getBoundingClientRect();
+      const scrollable = zone.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      const progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+      const idx = Math.min(TOTAL - 1, Math.floor(progress * TOTAL));
+      if (idx !== currentIdx || !frames[currentIdx]?.complete) {
+        currentIdx = idx;
+        drawFrame(frames[currentIdx]);
+      }
+    }
+
+    /* Preload all frames */
+    for (let i = 1; i <= TOTAL; i++) {
+      const img = new Image();
+      const n   = String(i).padStart(4, '0');
+      img.src   = FRAME_PATH + n + '.jpg';
+      img.onload = function() {
+        loaded++;
+        if (i === 1) {                                  /* frame_0001 specifically — draw it now */
+          canvas.width  = window.innerWidth;
+          canvas.height = window.innerHeight;
+          drawFrame(img);
+        }
+        if (loaded === TOTAL) { scrub(); }              /* all loaded — sync to scroll */
+      };
+      frames[i - 1] = img;
+    }
+
+    /* Draw frame_0001 immediately if it's already cached */
+    if (frames[0] && frames[0].complete) {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drawFrame(frames[0]);
+    }
+
+    window.addEventListener('scroll', scrub, { passive: true });
+    window.addEventListener('resize', function() { resizeCanvas(); scrub(); }, { passive: true });
+    resizeCanvas();
+  })();
+
+  /* ── Mobile hero canvas scroll scrub ── */
+  (function() {
+    const canvas = document.getElementById('mHeroCanvas');
+    const zone   = document.getElementById('m-scrub-zone');
+    if (!canvas || !zone) return;
+
+    const ctx   = canvas.getContext('2d');
+    const TOTAL = 121;
+    const frames = [];
+    let   loaded = 0;
+    let   curIdx = 0;
+
+    /* Resize canvas to fill viewport (full-screen, not 390px section) */
+    function resizeMCanvas() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drawMFrame(frames[curIdx]);
+    }
+
+    /* Draw frame: cover crop for portrait viewport from landscape source */
+    function drawMFrame(img) {
+      if (!img || !img.complete) return;
+      const cw = canvas.width, ch = canvas.height;
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+      const scale = Math.max(cw / iw, ch / ih);
+      const sw = iw * scale, sh = ih * scale;
+      const sx = (cw - sw) / 2 + 100;  /* +100 → shift frame right */
+      const sy = (ch - sh) / 2 - 60;  /* -60 → shift frame up */
+      ctx.drawImage(img, sx, sy, sw, sh);
+    }
+
+    /* Scroll through scrub zone → pick frame */
+    function scrubMobile() {
+      const rect      = zone.getBoundingClientRect();
+      const scrollable = zone.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      const progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+      const idx      = Math.min(TOTAL - 1, Math.floor(progress * TOTAL));
+      if (idx !== curIdx) {
+        curIdx = idx;
+        drawMFrame(frames[curIdx]);
+      }
+    }
+
+    /* Preload frames */
+    for (let i = 1; i <= TOTAL; i++) {
+      const img = new Image();
+      img.src   = 'frames/frame_' + String(i).padStart(4, '0') + '.jpg';
+      img.onload = function() {
+        loaded++;
+        if (i === 1) {                                  /* frame_0001 specifically — draw it now */
+          canvas.width  = window.innerWidth;
+          canvas.height = window.innerHeight;
+          drawMFrame(img);
+        }
+        if (loaded === TOTAL) scrubMobile();
+      };
+      frames[i - 1] = img;
+    }
+
+    /* Draw frame_0001 immediately if it's already cached */
+    if (frames[0] && frames[0].complete) {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drawMFrame(frames[0]);
+    }
+
+    window.addEventListener('scroll', scrubMobile, { passive: true });
+    window.addEventListener('resize', function() { resizeMCanvas(); scrubMobile(); }, { passive: true });
+    resizeMCanvas();
+  })();
+
+  /* ── Mobile nav (hamburger) ── */
+  const mHamburger  = document.getElementById('mHamburger');
+  const mNavOverlay = document.getElementById('mNavOverlay');
+  const mNavClose   = document.getElementById('mNavClose');
+  if (mHamburger) {
+    mHamburger.addEventListener('click', () => {
+      mNavOverlay.classList.add('open');
+      mHamburger.classList.add('menu-open');
+    });
+    mNavClose.addEventListener('click', () => {
+      mNavOverlay.classList.remove('open');
+      mHamburger.classList.remove('menu-open');
+    });
+
+    /* Закрываем меню при клике на любую ссылку */
+    mNavOverlay.querySelectorAll('a[href]').forEach(link => {
+      link.addEventListener('click', () => {
+        mNavOverlay.classList.remove('open');
+        mHamburger.classList.remove('menu-open');
+      });
+    });
+  }
+
+  /* ── Mobile approach: line grows + dots light up on scroll ── */
+  (function() {
+    const wrapper = document.getElementById('mw-approach-mob');
+    const lineEl  = document.getElementById('mApprLine');
+    const dots    = document.querySelectorAll('.m-appr-dot');
+    const dotSm   = document.querySelector('.m-appr-dot-sm');
+    const groups  = document.querySelectorAll('.m-appr-step-group');
+    if (!wrapper || !lineEl) return;
+
+    const LINE_FULL = 536;   // full line height in 390px units
+    const LINE_TOP  = 305;   // line starts at this y in section coords
+
+    // How far down the line each dot sits (390px space, from line top)
+    const DOT_OFFSETS = [0, 110, 230, 350, 470];
+
+    function updateApproach() {
+      const rect  = wrapper.getBoundingClientRect();
+      const ms    = window.innerWidth / 390;
+      const viewH = window.innerHeight;
+
+      // Use 75% of viewport as the "activation threshold"
+      const THRESHOLD       = viewH * 0.75;
+
+      // Screen positions of line start (y=305) and line end (y=841) in section coords
+      const lineStartScreen = rect.top + 305 * ms;
+      const lineEndScreen   = rect.top + 841 * ms;
+
+      // Line grows as the section scrolls past the threshold (1:1 mapping)
+      const scrollRange  = lineEndScreen - lineStartScreen; // = 536 * ms
+      const scrolledPast = THRESHOLD - lineStartScreen;
+      const lineProgress = Math.max(0, Math.min(1, scrolledPast / scrollRange));
+      const curLineH     = lineProgress * LINE_FULL;
+
+      lineEl.style.height = curLineH + 'px';
+
+      // Light dots & reveal step groups
+      DOT_OFFSETS.forEach((offset, i) => {
+        const reached = curLineH >= offset + 6;
+        dots[i] && dots[i].classList.toggle('lit', reached);
+        groups[i] && groups[i].classList.toggle('visible', reached);
+      });
+
+      if (dotSm) dotSm.classList.toggle('lit', curLineH >= 512);
+    }
+
+    window.addEventListener('scroll', updateApproach, { passive: true });
+    window.addEventListener('resize', updateApproach, { passive: true });
+    updateApproach();
+  })();
+
+  /* ── Desktop approach: connectors grow on scroll ── */
+  (function() {
+    const wrapper = document.getElementById('w-approach');
+    const conns   = document.querySelectorAll('#w-approach .step-conn-wrap');
+    if (!wrapper || !conns.length) return;
+
+    const CONN_COUNT = 4;
+    const LINE_MAX   = 111; // max line width in 1440-space px
+
+    function updateConnectors() {
+      const rect  = wrapper.getBoundingClientRect();
+      const viewH = window.innerHeight;
+
+      // Progress 0→1: starts earlier — when section top is at 85% of viewport,
+      // completes when section top reaches 30%
+      const p = Math.max(0, Math.min(1, (viewH * 0.85 - rect.top) / (viewH * 0.55)));
+
+      conns.forEach(function(conn, i) {
+        const dot  = conn.querySelector('.step-conn-dot');
+        const line = conn.querySelector('.step-conn-line');
+
+        // Each connector gets an equal 1/4 of total progress
+        const segP = Math.max(0, Math.min(1, (p - i / CONN_COUNT) / (1 / CONN_COUNT)));
+
+        if (line) line.style.width  = (segP * LINE_MAX) + 'px';
+        // Dot appears red only when line is fully drawn
+        if (dot)  dot.style.opacity = segP >= 0.98 ? 1 : 0;
+      });
+    }
+
+    window.addEventListener('scroll', updateConnectors, { passive: true });
+    window.addEventListener('resize', updateConnectors, { passive: true });
+    updateConnectors();
+  })();
+
+  /* ── Mobile services cards scroll-driven reveal ── */
+  (function() {
+    const cards = document.querySelectorAll('#mw-services .m-svc-card');
+    if (!cards.length) return;
+
+    function updateSvcCards() {
+      const viewH = window.innerHeight;
+      cards.forEach(function(card) {
+        const rect  = card.getBoundingClientRect();
+        // Animation starts when card top reaches 85% of viewport (near bottom)
+        // and completes at 20% (card well into view) — long window = effect is clearly visible
+        const start = viewH * 0.85;
+        const end   = viewH * 0.20;
+        const p     = Math.max(0, Math.min(1, (start - rect.top) / (start - end)));
+        card.style.transform = 'translateY(' + ((1 - p) * 120) + 'px)';
+      });
+    }
+
+    window.addEventListener('scroll', updateSvcCards, { passive: true });
+    window.addEventListener('resize', updateSvcCards, { passive: true });
+    updateSvcCards();
+  })();
+
+  /* ── Mobile project tabs ── */
+  const mProjTabs      = document.querySelectorAll('.m-proj-tab');
+  const mProjUnderline = document.getElementById('mProjUnderline');
+  if (mProjTabs.length) {
+    mProjTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        mProjTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        /* Move underline */
+        const center     = parseInt(tab.dataset.center);
+        const underlineW = 80;
+        mProjUnderline.style.left  = (center - underlineW / 2) + 'px';
+        mProjUnderline.style.width = underlineW + 'px';
+
+        /* Show / hide content blocks */
+        const key = tab.textContent.trim().toLowerCase(); // "websites" | "branding" | "adversting"
+        const mProjWebsites    = document.getElementById('mProjWebsites');
+        const mProjBranding    = document.getElementById('mProjBranding');
+        const mProjAdvertsting = document.getElementById('mProjAdvertsting');
+        if (mProjWebsites)    mProjWebsites.style.display    = (key === 'websites')    ? '' : 'none';
+        if (mProjBranding)    mProjBranding.style.display    = (key === 'branding')    ? '' : 'none';
+        if (mProjAdvertsting) mProjAdvertsting.style.display = (key === 'adversting')  ? '' : 'none';
+
+        /* Сбрасываем accordion при уходе с вкладки */
+        function collapseExtra(extraId, btnId, btnTextId) {
+          const ex  = document.getElementById(extraId);
+          const bt  = document.getElementById(btnId);
+          const btt = document.getElementById(btnTextId);
+          if (ex)  ex.style.maxHeight = '0';
+          if (bt)  bt.classList.remove('open');
+          if (btt) btt.textContent = 'More Projects';
+        }
+        if (key !== 'websites') collapseExtra('mProjExtra',  'mProjMoreBtn',  'mProjMoreBtnText');
+        if (key !== 'branding') collapseExtra('mBrandExtra', 'mBrandMoreBtn', 'mBrandMoreBtnText');
+
+        /* Пересчитываем высоту wrapper */
+        const mProj  = document.querySelector('.m-projects');
+        const mwProj = document.getElementById('mw-projects');
+        if (mProj && mwProj) {
+          const ms = window.innerWidth / 390;
+          requestAnimationFrame(() => {
+            mwProj.style.transition = 'none';
+            mwProj.style.height     = mProj.offsetHeight * ms + 'px';
+          });
+        }
+      });
+    });
+  }
+
+  /* ── Mobile projects: More / Less button ── */
+  (function() {
+    const btn    = document.getElementById('mProjMoreBtn');
+    const extra  = document.getElementById('mProjExtra');
+    const mProj  = document.querySelector('.m-projects');
+    const mwProj = document.getElementById('mw-projects');
+    if (!btn || !extra || !mProj || !mwProj) return;
+
+    const DUR  = 750; // ms — must match CSS transition on #mw-projects
+    const EASE = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    const btnText = document.getElementById('mProjMoreBtnText');
+    let open = false;
+
+    btn.addEventListener('click', function() {
+      open = !open;
+      const ms          = window.innerWidth / 390;
+      const extraH      = extra.scrollHeight; // real content height (works even at max-height:0)
+      const collapsedWH = mProj.offsetHeight * ms; // current wrapper height in screen px
+
+      /* Apply transition to extra element */
+      extra.style.transition = 'max-height ' + DUR + 'ms ' + EASE;
+
+      if (open) {
+        /* ── Expand ── */
+        btn.classList.add('open');
+        if (btnText) btnText.textContent = 'Less';
+
+        extra.style.maxHeight = extraH + 'px';                       // animate to exact height
+        mwProj.style.height   = (collapsedWH + extraH * ms) + 'px'; // wrapper grows in sync
+
+      } else {
+        /* ── Collapse ── */
+
+        /* 1. Where will the button end up after collapse?
+              The extra cards (extraH stage-px = extraH*ms screen-px) sit ABOVE the button,
+              so when they collapse the button moves UP by exactly extraH*ms screen-px.      */
+        const btnPageTop    = window.scrollY + btn.getBoundingClientRect().top;
+        const btnFinalTop   = btnPageTop - extraH * ms;          /* button position after collapse */
+        const btnFinalBot   = btnFinalTop + btn.offsetHeight * ms;
+        const targetScrollY = Math.max(0, btnFinalBot - window.innerHeight + 24);
+
+        /* 2. Start collapsing */
+        btn.classList.remove('open');
+        if (btnText) btnText.textContent = 'More Projects';
+        extra.style.maxHeight = '0';
+        mwProj.style.height   = (collapsedWH - extraH * ms) + 'px';
+
+        /* 3. Scroll to the computed position so button lands near bottom of screen */
+        window.scrollTo({ top: targetScrollY, behavior: 'smooth' });
+      }
+    });
+  })();
+
+  /* ── Mobile branding: More / Less button ── */
+  (function() {
+    const btn    = document.getElementById('mBrandMoreBtn');
+    const extra  = document.getElementById('mBrandExtra');
+    const mProj  = document.querySelector('.m-projects');
+    const mwProj = document.getElementById('mw-projects');
+    if (!btn || !extra || !mProj || !mwProj) return;
+
+    const DUR  = 750;
+    const EASE = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    const btnText = document.getElementById('mBrandMoreBtnText');
+    let open = false;
+
+    btn.addEventListener('click', function() {
+      open = !open;
+      const ms          = window.innerWidth / 390;
+      const extraH      = extra.scrollHeight;
+      const collapsedWH = mProj.offsetHeight * ms;
+
+      extra.style.transition = 'max-height ' + DUR + 'ms ' + EASE;
+
+      if (open) {
+        btn.classList.add('open');
+        if (btnText) btnText.textContent = 'Less';
+        extra.style.maxHeight = extraH + 'px';
+        mwProj.style.height   = (collapsedWH + extraH * ms) + 'px';
+
+      } else {
+        const btnPageTop    = window.scrollY + btn.getBoundingClientRect().top;
+        const btnFinalTop   = btnPageTop - extraH * ms;
+        const btnFinalBot   = btnFinalTop + btn.offsetHeight * ms;
+        const targetScrollY = Math.max(0, btnFinalBot - window.innerHeight + 24);
+
+        btn.classList.remove('open');
+        if (btnText) btnText.textContent = 'More Projects';
+        extra.style.maxHeight = '0';
+        mwProj.style.height   = (collapsedWH - extraH * ms) + 'px';
+
+        window.scrollTo({ top: targetScrollY, behavior: 'smooth' });
+      }
+    });
+  })();
+
+  /* ── Mobile hero arrows: rotate on click, scroll after, return after 1s ── */
+  (function() {
+    function bindArrowClick(linkSel, arrowSel) {
+      const link  = document.querySelector(linkSel);
+      const arrow = document.querySelector(arrowSel);
+      if (!link || !arrow) return;
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        /* Rotate arrow */
+        arrow.classList.add('rotated');
+        /* Scroll to section after rotation starts */
+        setTimeout(function() {
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
+        }, 250);
+        /* Return arrow to original position after 1s */
+        setTimeout(function() {
+          arrow.classList.remove('rotated');
+        }, 1000);
+      });
+    }
+    bindArrowClick('.m-btm-arrow-link', '.m-btm-arrow');
+    bindArrowClick('.m-cta-card',       '.m-cta-arrow');
+  })();
+
+  /* ── Mobile nav language toggle ── */
+  document.querySelectorAll('.m-nav-lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.m-nav-lang-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  /* ── Hero: entrance animation → hover scale ── */
+  document.querySelectorAll('.headline-left .line, .headline-right .line').forEach(line => {
+    line.addEventListener('animationend', () => {
+      line.style.animation = 'none';
+      line.style.opacity   = '1';
+      line.classList.add('anim-done');
+    });
+  });
+
+  /* ── Hero: language selector ── */
+  const langSelector = document.getElementById('langSelector');
+  const langToggle   = document.getElementById('langToggle');
+  langToggle.addEventListener('click', () => langSelector.classList.toggle('open'));
+  document.addEventListener('click', e => { if (!langSelector.contains(e.target)) langSelector.classList.remove('open'); });
+
+  /* ── Section 2: cards appear on scroll (not on load) ── */
+  (function() {
+    const cards   = document.querySelectorAll('.services .card');
+    const photos  = document.querySelectorAll('.services .card-photo-wrapper');
+    let triggered = false;
+
+    function checkCards() {
+      if (triggered) return;
+      const wrapper = document.getElementById('w-services');
+      const rect    = wrapper.getBoundingClientRect();
+      const scale   = window.innerWidth / 1440;
+      // Cards sit at top:172px inside the scaled section
+      const cardsTopInViewport = rect.top + 172 * scale;
+
+      if (cardsTopInViewport < window.innerHeight * 0.88) {
+        triggered = true;
+        cards.forEach((card, i) => {
+          setTimeout(() => card.classList.add('in-view'), i * 170);
+        });
+        photos.forEach((photo, i) => {
+          setTimeout(() => photo.classList.add('in-view'), i * 170 + 100);
+        });
+        window.removeEventListener('scroll', checkCards);
+      }
+    }
+
+    window.addEventListener('scroll', checkCards);
+  })();
+
+  /* ── Section 3: project cards appear on scroll ── */
+  (function() {
+    const projImgs = document.querySelectorAll('.projects .proj-img');
+    let triggered  = false;
+
+    function checkProjects() {
+      if (triggered) return;
+      const wrapper = document.getElementById('w-projects');
+      const rect    = wrapper.getBoundingClientRect();
+      const scale   = window.innerWidth / 1440;
+      const cardsTopInViewport = rect.top + 167 * scale;
+
+      if (cardsTopInViewport < window.innerHeight * 0.88) {
+        triggered = true;
+        projImgs.forEach((img, i) => {
+          setTimeout(() => img.classList.add('in-view'), i * 150);
+        });
+        window.removeEventListener('scroll', checkProjects);
+      }
+    }
+
+    window.addEventListener('scroll', checkProjects);
+  })();
+
+  /* ── Section 3: typewriter ── */
+  (function() {
+    const el   = document.getElementById('swipeText');
+    const full = 'Swipe right for more works';
+    let i = 0, deleting = false;
+    function tick() {
+      if (!deleting) {
+        el.textContent = full.slice(0, i + 1); i++;
+        if (i === full.length) { deleting = true; setTimeout(tick, 1400); return; }
+        setTimeout(tick, 55);
+      } else {
+        el.textContent = full.slice(0, i - 1); i--;
+        if (i === 0) { deleting = false; setTimeout(tick, 400); return; }
+        setTimeout(tick, 30);
+      }
+    }
+    setTimeout(tick, 600);
+  })();
+
+  /* ── Section 3: tab underline + group switching ── */
+  const tabs      = document.querySelectorAll('.tab');
+  const underline = document.getElementById('tabUnderline');
+  const projInner = document.getElementById('proj-inner');
+  const projScroll = document.getElementById('proj-scroll');
+
+  /* inner-width per category (stage px) */
+  const GROUP_WIDTHS = { websites: 4378, branding: 2748, adversting: 1118 };
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      /* Move underline */
+      const rect     = tab.getBoundingClientRect();
+      const sectRect = tab.closest('.projects').getBoundingClientRect();
+      const s        = sectRect.width / 1440;
+      const centerX  = (rect.left + rect.width / 2 - sectRect.left) / s;
+      const tabW     = rect.width / s;
+      underline.style.left  = (centerX - tabW / 2) + 'px';
+      underline.style.width = tabW + 'px';
+
+      /* Show / hide groups */
+      const key = tab.dataset.tab;
+      document.querySelectorAll('.proj-group').forEach(g => {
+        g.style.display = (g.id === 'pg-' + key) ? '' : 'none';
+      });
+
+      /* Resize inner track & reset scroll */
+      if (projInner) projInner.style.width = (GROUP_WIDTHS[key] || 3726) + 'px';
+      if (projScroll) projScroll.scrollLeft = 0;
+
+      /* Ensure branding imgs have in-view class */
+      const group = document.getElementById('pg-' + key);
+      if (group) {
+        group.querySelectorAll('.proj-img').forEach((el, i) => {
+          setTimeout(() => el.classList.add('in-view'), i * 80);
+        });
+      }
+    });
+  });
+</script>
+
+<!-- ══ LOADER SCRIPT ══ -->
+<script>
+(function () {
+  var isMobile = window.innerWidth < 768;
+  var BASE     = isMobile ? 390  : 1440;
+  var CSIZE    = isMobile ? 80   : 110;
+  var GAP      = isMobile ? 3    : 4;
+  var DMIN     = isMobile ? 50   : 70;
+  var DMAX     = isMobile ? 130  : 200;
+
+  var stage = document.getElementById('lStage');
+  var wrap  = document.getElementById('lCardWrap');
+  var TOTAL = 8;
+
+  /* ── Scale helpers ── */
+  function sc()     { return window.innerWidth / BASE; }
+  function stageH() { return window.innerHeight / sc(); }
+
+  function scaleStage() {
+    stage.style.transform = 'scale(' + sc() + ')';
+    stage.style.height    = stageH() + 'px';
+  }
+  window.addEventListener('resize', scaleStage, { passive: true });
+
+  /* ── Create 8 cards ── */
+  var cards = [];
+  for (var i = 0; i < TOTAL; i++) {
+    var c   = document.createElement('div');
+    c.className = 'l-card';
+    var img = document.createElement('img');
+    img.src = 'loader-images/img-0' + (i + 1) + '.webp';
+    c.appendChild(img);
+    wrap.appendChild(c);
+    cards.push(c);
+  }
+
+  /* ── Card size for mobile ── */
+  if (isMobile) {
+    cards.forEach(function(c) {
+      c.style.width  = CSIZE + 'px';
+      c.style.height = CSIZE + 'px';
+    });
+  }
+
+  /* ── Wrap positioning ── */
+  function setWrapTop(pct) { wrap.style.top = (stageH() * pct) + 'px'; }
+
+  function showOnly(idx) {
+    for (var k = 0; k < TOTAL; k++) {
+      cards[k].style.opacity   = (k === idx) ? '1' : '0';
+      cards[k].style.transform = 'none';
+      cards[k].style.zIndex    = (k === idx) ? '1' : '0';
+    }
+  }
+
+  /* ── Init ── */
+  wrap.style.position  = 'absolute';
+  wrap.style.width     = CSIZE + 'px';
+  wrap.style.height    = CSIZE + 'px';
+  wrap.style.transform = 'translate(-50%, -50%)';
+  setWrapTop(0.88);
+  showOnly(0);
+  scaleStage();
+
+  /* ── Wait for images ── */
+  var loaded = 0;
+  function onImgLoad() { loaded++; if (loaded >= TOTAL) beginAnim(); }
+  cards.forEach(function (c) {
+    var img = c.querySelector('img');
+    if (img.complete) { onImgLoad(); }
+    else { img.addEventListener('load', onImgLoad); }
+  });
+  var fallbackTimer = setTimeout(beginAnim, 1500);
+
+  var animStarted = false;
+  function beginAnim() {
+    if (animStarted) return;
+    animStarted = true;
+    clearTimeout(fallbackTimer);
+    requestAnimationFrame(function () { requestAnimationFrame(phase1); });
+  }
+
+  /* ── Counter 0 → 100% ── */
+  function startCounter() {
+    var el       = document.getElementById('tPercent');
+    if (!el) return;
+    var duration = 3400;
+    var start    = performance.now();
+    function tick(now) {
+      var p     = Math.min(1, (now - start) / duration);
+      var eased = 1 - Math.pow(1 - p, 2);
+      el.textContent = Math.floor(eased * 100) + '%';
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = '100%';
+    }
+    requestAnimationFrame(tick);
+  }
+
+  /* ── Stack maps (Figma node 39:2065) ── */
+  var scaleMap = [1.30, 1.01, 0.815, 0.632, 0.491, 0.431, 0.383, 0.318];
+  var tyMap    = [ -15,   18,    41,    61,    75,    82,    87,    93 ];
+
+  /* ══ PHASE 1 — Rise + cycle ══ */
+  function phase1() {
+    wrap.style.transition = 'top 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    setWrapTop(0.44);
+
+    setTimeout(function () {
+      document.querySelectorAll('#tLeft .l-slide-left').forEach(function(el) { el.classList.add('on'); });
+      document.getElementById('tPercent').classList.add('on');
+      document.getElementById('tBottom').classList.add('on');
+      document.querySelectorAll('#tRight .l-slide-right').forEach(function(el) { el.classList.add('on'); });
+      startCounter();
+    }, 50);
+
+    var active = 0, cycles = 0;
+    var cycleTimer = setInterval(function () {
+      cards[active].style.opacity = '0';
+      active = (active + 1) % TOTAL;
+      cards[active].style.opacity = '1';
+      if (active === TOTAL - 1) {
+        cycles++;
+        if (cycles >= 2) { clearInterval(cycleTimer); setTimeout(phase2, 500); }
+      }
+    }, 70);
+  }
+
+  /* ══ PHASE 2 — Stack ══ */
+  function phase2() {
+    for (var b = 0; b < TOTAL; b++) {
+      var ci = (7 - b + TOTAL) % TOTAL;
+      cards[ci].style.transition   = 'transform 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      cards[ci].style.opacity      = '1';
+      cards[ci].style.transform    = 'translateY(' + tyMap[b] + 'px) scale(' + scaleMap[b] + ')';
+      cards[ci].style.zIndex       = (TOTAL - b).toString();
+      cards[ci].style.borderRadius = '5px';
+    }
+    setTimeout(phase3, 850);
+  }
+
+  /* ══ PHASE 3 — Unfold ══ */
+  function phase3() {
+    var tBottom = document.getElementById('tBottom');
+    if (tBottom) {
+      tBottom.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      tBottom.style.opacity    = '0';
+      tBottom.style.transform  = 'translateY(50px)';
+    }
+
+    var sh      = stageH();
+    var dynSize = Math.max(DMIN, Math.min(DMAX, Math.floor((sh * 0.92 - (TOTAL - 1) * GAP) / TOTAL)));
+    var colH    = TOTAL * dynSize + (TOTAL - 1) * GAP;
+    var newTop  = sh * 0.5 - colH / 2;
+
+    wrap.style.transition = 'none';
+    wrap.style.width      = dynSize + 'px';
+    wrap.style.height     = colH + 'px';
+    wrap.style.top        = newTop + 'px';
+    wrap.style.transform  = 'translateX(-50%)';
+
+    for (var b = 0; b < TOTAL; b++) {
+      var ci       = (7 - b + TOTAL) % TOTAL;
+      var startTop = (sh * 0.44 + tyMap[b]) - newTop - dynSize / 2;
+      cards[ci].style.transition = 'none';
+      cards[ci].style.top        = startTop + 'px';
+      cards[ci].style.left       = '0';
+      cards[ci].style.width      = dynSize + 'px';
+      cards[ci].style.height     = dynSize + 'px';
+      cards[ci].style.transform  = 'scale(' + (scaleMap[b] * CSIZE / dynSize) + ')';
+    }
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        cards.forEach(function (c, i) {
+          var delay = (TOTAL - 1 - i) * 0.05;
+          c.style.transition   = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) ' + delay + 's';
+          c.style.transform    = 'none';
+          c.style.top          = (i * (dynSize + GAP)) + 'px';
+          c.style.borderRadius = '5px';
+        });
+      });
+    });
+
+    setTimeout(phase4, 1100);
+  }
+
+  /* ══ PHASE 4 — Gradient wipe up ══ */
+  function phase4() {
+    var loader = document.getElementById('loader');
+    loader.style.webkitMaskImage = 'linear-gradient(to bottom, black 55%, transparent 100%)';
+    loader.style.maskImage       = 'linear-gradient(to bottom, black 55%, transparent 100%)';
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        loader.style.transition = 'transform 0.9s cubic-bezier(0.4, 0, 0.2, 1)';
+        loader.style.transform  = 'translateY(-100%)';
+        document.body.classList.add('hero-ready');
+        setTimeout(function () { loader.style.display = 'none'; }, 950);
+      });
+    });
+  }
+
+})();
+</script>
 
 </body>
 </html>

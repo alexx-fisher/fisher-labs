@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fisher Labs — Let's Create Something Great Together</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #f2f0f0;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    .section-wrapper {
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    .cta {
+      position: relative;
+      width: 1440px;
+      height: 190px;
+      background: #f2f0f0;
+      transform-origin: top left;
+    }
+
+    /* Asterisk */
+    .s-asterisk {
+      position: absolute;
+      left: 80px;
+      top: 44px;
+      width: 40px;
+      height: 41px;
+    }
+
+    /* Title */
+    .s-title {
+      position: absolute;
+      left: 144px;
+      top: 44px;
+      font-size: 35px;
+      font-weight: 300;
+      color: #301616;
+      text-transform: uppercase;
+      line-height: 35px;
+      width: 348px;
+    }
+
+    .s-title-line {
+      display: block;
+      cursor: default;
+      transform-origin: left center;
+      transition: transform 0.8s ease;
+    }
+
+    .s-title-line:hover {
+      transform: scale(1.07);
+    }
+
+    /* Description */
+    .s-desc {
+      position: absolute;
+      left: 639px;
+      top: 67px;
+      width: 219px;
+      font-size: 16px;
+      font-weight: 300;
+      color: #0c0c0c;
+      line-height: 20px;
+    }
+
+    /* CTA Button */
+    .cta-btn {
+      position: absolute;
+      left: 953px;
+      top: 62px;
+      width: 270px;
+      height: 66px;
+      background: #9a0607;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 36px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .cta-btn:hover {
+      background: #7d0505;
+    }
+
+    .cta-btn-label {
+      font-size: 15px;
+      font-weight: 400;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      line-height: 15px;
+    }
+
+    .cta-btn-arrow {
+      width: 33px;
+      height: 33px;
+      flex-shrink: 0;
+      transition: transform 0.35s ease;
+    }
+
+    .cta-btn:hover .cta-btn-arrow {
+      transform: rotate(45deg);
+    }
+  </style>
+</head>
+<body>
+
+<div class="section-wrapper">
+  <section class="cta">
+
+    <img class="s-asterisk" src="https://www.figma.com/api/mcp/asset/b667cd13-e407-46d3-ada1-216ca356cfea" alt="">
+
+    <div class="s-title">
+      <span class="s-title-line">Let's create</span>
+      <span class="s-title-line">something great</span>
+      <span class="s-title-line">together</span>
+    </div>
+
+    <p class="s-desc">Have a project in mind? Let's talk about how we can help your brand grow and succeed.</p>
+
+    <a class="cta-btn" href="#">
+      <span class="cta-btn-label">Start a project</span>
+      <img class="cta-btn-arrow" src="https://www.figma.com/api/mcp/asset/9a8bbad2-44cf-4802-98a3-0e8423e01fa3" alt="">
+    </a>
+
+  </section>
+</div>
+
+<script>
+  function scale() {
+    const wrapper = document.querySelector('.section-wrapper');
+    const section = document.querySelector('.cta');
+    const s = window.innerWidth / 1440;
+    section.style.transform = 'scale(' + s + ')';
+    wrapper.style.height = (190 * s) + 'px';
+  }
+  window.addEventListener('resize', scale);
+  scale();
+</script>
+
+</body>
+</html>

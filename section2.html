@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fisher Labs — Services</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #f2f0f0;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    .section-wrapper {
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    .services {
+      position: relative;
+      width: 1440px;
+      height: 490px;
+      background: #f2f0f0;
+      transform-origin: top left;
+    }
+
+    /* Asterisk */
+    .s-asterisk {
+      position: absolute;
+      left: 80px;
+      top: 34px;
+      width: 40px;
+      height: 41px;
+    }
+
+    /* Header */
+    .s-label {
+      position: absolute;
+      left: 144px;
+      top: 34px;
+      font-size: 10px;
+      font-weight: 400;
+      color: #0c0c0c;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 16px;
+    }
+
+    .s-title {
+      position: absolute;
+      left: 144px;
+      top: 57px;
+      font-size: 35px;
+      font-weight: 300;
+      color: #301616;
+      text-transform: uppercase;
+      line-height: 35px;
+      width: 311px;
+    }
+
+    /* Hover animation per line — same as hero headline */
+    .s-title-line {
+      display: block;
+      cursor: default;
+      transform-origin: left center;
+      transition: transform 0.8s ease;
+    }
+
+    .s-title-line:hover {
+      transform: scale(1.07);
+    }
+
+    .s-desc {
+      position: absolute;
+      left: 521px;
+      top: 73px;
+      width: 264px;
+      font-size: 14px;
+      font-weight: 300;
+      color: #0c0c0c;
+      line-height: 18px;
+    }
+
+    /* Cards */
+    .card {
+      position: absolute;
+      top: 172px;
+      width: 395px;
+      height: 265px;
+      background: #f0f0f0;
+      border: 1px solid #dcdcdc;
+      border-radius: 12px;
+    }
+
+    .card-num {
+      position: absolute;
+      left: 26px;
+      top: 23px;
+      font-size: 14px;
+      font-weight: 400;
+      color: #970c09;
+      line-height: 18px;
+    }
+
+    .card-title {
+      position: absolute;
+      left: 26px;
+      top: 48px;
+      font-size: 25px;
+      font-weight: 300;
+      color: #301616;
+      text-transform: uppercase;
+      line-height: 25px;
+      width: 267px;
+    }
+
+    .card-text {
+      position: absolute;
+      left: 26px;
+      top: 112px;
+      width: 178px;
+      font-size: 14px;
+      font-weight: 300;
+      color: #0c0c0c;
+      line-height: 18px;
+    }
+
+    /* Button — fills left to right with red on hover */
+    .card-btn {
+      position: absolute;
+      left: 15px;
+      bottom: 17px;
+      width: 180px;
+      height: 40px;
+      background: #f1f1f1;
+      border: 1px solid #c8c8c8;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      cursor: pointer;
+      text-decoration: none;
+      overflow: hidden;
+    }
+
+    .card-btn::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: #970c09;
+      border-radius: 10px;
+      clip-path: inset(0 100% 0 0 round 10px);
+      transition: clip-path 0.4s ease;
+      z-index: 0;
+    }
+
+    .card-btn:hover::before {
+      clip-path: inset(0 0% 0 0 round 10px);
+    }
+
+    .card-btn span {
+      font-size: 11px;
+      font-weight: 400;
+      color: #0c0c0c;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      position: relative;
+      z-index: 1;
+      transition: color 0.4s ease;
+    }
+
+    .card-btn svg {
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-btn svg path {
+      transition: stroke 0.4s ease;
+    }
+
+    .card-btn:hover span {
+      color: white;
+    }
+
+    .card-btn:hover svg path {
+      stroke: white;
+    }
+
+    /* Photos — floating at section level with 3D tilt on hover */
+    .card-photo-wrapper {
+      position: absolute;
+      top: 337px;
+      width: 241px;
+      height: 120px;
+      perspective: 700px;
+    }
+
+    .card-photo {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 10px 24px rgba(0,0,0,0.28));
+      transition: transform 0.45s ease, filter 0.45s ease;
+    }
+
+    .card-photo-wrapper:hover .card-photo {
+      transform: rotateY(-10deg) rotateX(4deg);
+      filter: drop-shadow(0 14px 32px rgba(0,0,0,0.38));
+    }
+
+    .card-photo-mask {
+      width: 100%;
+      height: 100%;
+      -webkit-mask-image: url('https://www.figma.com/api/mcp/asset/75538f92-bc10-460e-b007-814f7c618d77');
+      mask-image: url('https://www.figma.com/api/mcp/asset/75538f92-bc10-460e-b007-814f7c618d77');
+      -webkit-mask-size: 205px 120px;
+      mask-size: 205px 120px;
+      -webkit-mask-position: 6px 0;
+      mask-position: 6px 0;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    .card-photo-mask img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<div class="section-wrapper">
+  <section class="services">
+
+    <img class="s-asterisk" src="https://www.figma.com/api/mcp/asset/78c5acac-a136-46d9-a99d-04998503076b" alt="">
+
+    <p class="s-label">What we do</p>
+
+    <div class="s-title">
+      <span class="s-title-line">Services that</span>
+      <span class="s-title-line">drive results</span>
+    </div>
+
+    <p class="s-desc">
+      We combine creativity, strategy and technology to deliver digital solutions that help your brand grow and stand out
+    </p>
+
+    <!-- Card 1 -->
+    <div class="card" style="left: 80px">
+      <span class="card-num">01</span>
+      <div class="card-title">Web design<br>&amp; development</div>
+      <p class="card-text">Modern, responsive and conversion-focused websites that deliver results</p>
+      <a class="card-btn" href="#">
+        <span>Write for details</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M2 8L8 2M8 2H3M8 2V7" stroke="#0c0c0c" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card" style="left: 520px">
+      <span class="card-num">02</span>
+      <div class="card-title">Advertising<br>creatives</div>
+      <p class="card-text">Scroll-stopping ads and visual content that capture attention and drive action</p>
+      <a class="card-btn" href="#">
+        <span>Write for details</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M2 8L8 2M8 2H3M8 2V7" stroke="#0c0c0c" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card" style="left: 960px">
+      <span class="card-num">03</span>
+      <div class="card-title">Branding<br>&amp; identity</div>
+      <p class="card-text">Strong brands start with strategy. We build identities that leave a lasting impact</p>
+      <a class="card-btn" href="#">
+        <span>Write for details</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M2 8L8 2M8 2H3M8 2V7" stroke="#0c0c0c" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Photos floating at section level -->
+    <div class="card-photo-wrapper" style="left: 284px">
+      <div class="card-photo">
+        <div class="card-photo-mask">
+          <img src="https://www.figma.com/api/mcp/asset/8f8f5fd8-1044-46b2-adc7-f1937c8de88d" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="card-photo-wrapper" style="left: 724px">
+      <div class="card-photo">
+        <div class="card-photo-mask">
+          <img src="https://www.figma.com/api/mcp/asset/8f8f5fd8-1044-46b2-adc7-f1937c8de88d" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="card-photo-wrapper" style="left: 1164px">
+      <div class="card-photo">
+        <div class="card-photo-mask">
+          <img src="https://www.figma.com/api/mcp/asset/8f8f5fd8-1044-46b2-adc7-f1937c8de88d" alt="">
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+<script>
+  function scale() {
+    const wrapper = document.querySelector('.section-wrapper');
+    const section = document.querySelector('.services');
+    const s = window.innerWidth / 1440;
+    section.style.transform = 'scale(' + s + ')';
+    wrapper.style.height = (490 * s) + 'px';
+  }
+  window.addEventListener('resize', scale);
+  scale();
+</script>
+
+</body>
+</html>
